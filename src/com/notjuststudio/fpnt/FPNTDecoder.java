@@ -2,6 +2,8 @@ package com.notjuststudio.fpnt;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,10 +29,17 @@ public class FPNTDecoder {
                 output.write(FPNTParser.parse(map.getValue().size()));
                 switch (map.getKey()) {
                     case FPNTConstants.BOOLEAN: {
+                        final List<String> keys = new ArrayList<>(map.getValue().keySet());
+                        final boolean[] values = new boolean[map.getValue().size()];
+
                         for (String key : map.getValue().keySet()) {
-                            writeKey(output, key);
+                            final int index = keys.indexOf(key);
+                            values[index] = (boolean)map.getValue().get(key);
                         }
-                        output.write(FPNTParser.parse(FPNTParser.parseBooleanArray(map.getValue().values().toArray(new Object[map.getValue().size()]))));
+
+                        for (String key : keys)
+                            writeKey(output, key);
+                        output.write(FPNTParser.parse(values));
                         break;
                     }
                     case FPNTConstants.BYTE: {
@@ -146,6 +155,7 @@ public class FPNTDecoder {
                             final String key = readKey(input);
                             container.putByte(key, (byte)input.read());
                         }
+                        break;
                     }
                     case FPNTConstants.CHAR:{
                         for (int i = 0; i < length; i++) {
@@ -154,6 +164,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putChar(key, FPNTParser.parseChar(bytes));
                         }
+                        break;
                     }
                     case FPNTConstants.INT:{
                         for (int i = 0; i < length; i++) {
@@ -170,6 +181,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putLong(key, FPNTParser.parseLong(bytes));
                         }
+                        break;
                     }
                     case FPNTConstants.BOOLEAN_ARRAY:{
                         for (int i = 0; i < length; i++) {
@@ -188,6 +200,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putByteArray(key, bytes);
                         }
+                        break;
                     }
                     case FPNTConstants.CHAR_ARRAY:{
                         for (int i = 0; i < length; i++) {
@@ -197,6 +210,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putCharArray(key, FPNTParser.parseCharArray(bytes));
                         }
+                        break;
                     }
                     case FPNTConstants.INT_ARRAY:{
                         for (int i = 0; i < length; i++) {
@@ -206,6 +220,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putIntArray(key, FPNTParser.parseIntArray(bytes));
                         }
+                        break;
                     }
                     case FPNTConstants.LONG_ARRAY:{
                         for (int i = 0; i < length; i++) {
@@ -215,6 +230,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putLongArray(key, FPNTParser.parseLongArray(bytes));
                         }
+                        break;
                     }
                     default:
                         break maps;

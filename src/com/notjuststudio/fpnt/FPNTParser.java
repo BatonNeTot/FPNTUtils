@@ -65,7 +65,7 @@ public class FPNTParser {
         final int length = value.length / 8 + ((value.length % 8) > 0 ? 1 : 0);
         final byte[] bytes = new byte[length];
         for (int i = 0; i < value.length; i++) {
-            bytes[i / 8] = (byte)(parse(value[i]) << (7 - (i % 8)));
+            bytes[i / 8] = (byte)((bytes[i / 8]) | (parse(value[i]) << (7 - (i % 8))));
         }
         return bytes;
     }

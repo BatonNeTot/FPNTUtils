@@ -152,15 +152,58 @@ public class FPNTContainer {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder("[");
-        for (Map.Entry<Byte, Map<String, Object>> map : maps.entrySet()) {
-            builder.append(map.getKey()).append(":[");
-            final Iterator<String> iterator = map.getValue().keySet().iterator();
-            while (iterator.hasNext()) {
-                builder.append(iterator.next());
-                if (iterator.hasNext())
-                    builder.append(", ");
+        final Iterator<Map.Entry<Byte, Map<String, Object>>> iterator = maps.entrySet().iterator();
+        while(iterator.hasNext()) {
+            final Map.Entry<Byte, Map<String, Object>> entry = iterator.next();
+            final String name;
+            switch (entry.getKey()) {
+                case FPNTConstants.BOOLEAN: {
+                    name = "Boolean";
+                    break;
+                }
+                case FPNTConstants.BYTE: {
+                    name = "Byte";
+                    break;
+                }
+                case FPNTConstants.CHAR: {
+                    name = "Character";
+                    break;
+                }
+                case FPNTConstants.INT: {
+                    name = "Integer";
+                    break;
+                }
+                case FPNTConstants.LONG: {
+                    name = "Long";
+                    break;
+                }
+                case FPNTConstants.BOOLEAN_ARRAY: {
+                    name = "Boolean[]";
+                    break;
+                }
+                case FPNTConstants.BYTE_ARRAY: {
+                    name = "Byte[]";
+                    break;
+                }
+                case FPNTConstants.CHAR_ARRAY: {
+                    name = "Character[]";
+                    break;
+                }
+                case FPNTConstants.INT_ARRAY: {
+                    name = "Integer[]";
+                    break;
+                }
+                case FPNTConstants.LONG_ARRAY: {
+                    name = "Long[]";
+                    break;
+                }
+                default: {
+                    name = "None";
+                }
             }
-            builder.append("]");
+            builder.append(name).append(":").append(entry.getValue().size());
+            if (iterator.hasNext())
+                builder.append(",");
         }
         builder.append("]");
         return builder.toString();
