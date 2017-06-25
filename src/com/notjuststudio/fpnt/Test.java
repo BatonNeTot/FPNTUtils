@@ -20,8 +20,16 @@ public class Test {
         container.putBoolean("IMPORTANT_BOOL8", true);
         container.putBoolean("IMPORTANT_BOOL9", true);
         container.putByte("Byte_code", Byte.MAX_VALUE);
+        container.putChar("Symbol", 'q');
+        container.putInt("Size", 17);
         FPNTDecoder.write(new File("test.fpnt"), container, true);
         final FPNTContainer output = FPNTDecoder.read(new File("test.fpnt"));
         System.out.println(output);
+        for (byte type : output.getTypes()) {
+            System.out.println(type);
+            for (String key : output.getTypeKeys(type)) {
+                System.out.println("  " + output.getValue(type, key).toString());
+            }
+        }
     }
 }

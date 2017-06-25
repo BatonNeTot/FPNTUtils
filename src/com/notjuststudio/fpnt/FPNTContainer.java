@@ -3,6 +3,7 @@ package com.notjuststudio.fpnt;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by George on 25.06.2017.
@@ -11,7 +12,7 @@ public class FPNTContainer {
 
     private final Map<Byte, Map<String, Object>> maps = new HashMap<>();
 
-    public Map<Byte, Map<String, Object>> getMaps() {
+    Map<Byte, Map<String, Object>> getMaps() {
         return maps;
     }
 
@@ -147,6 +148,58 @@ public class FPNTContainer {
 
     String getString(final String key) {
         return (String)getValue(FPNTConstants.STRING, key);
+    }
+
+    Set<Byte> getTypes() {
+        return maps.keySet();
+    }
+
+    Set<String> getTypeKeys(final byte type) {
+        return maps.get(type).keySet();
+    }
+
+    Set<String> getBooleanKeys() {
+        return getTypeKeys(FPNTConstants.BOOLEAN);
+    }
+
+    Set<String> getByteKeys() {
+        return getTypeKeys(FPNTConstants.BYTE);
+    }
+
+    Set<String> getCharKeys() {
+        return getTypeKeys(FPNTConstants.CHAR);
+    }
+
+    Set<String> getIntKeys() {
+        return getTypeKeys(FPNTConstants.INT);
+    }
+
+    Set<String> getLongKeys() {
+        return getTypeKeys(FPNTConstants.LONG);
+    }
+
+    Set<String> getBooleaArraynKeys() {
+        return getTypeKeys(FPNTConstants.BOOLEAN_ARRAY);
+    }
+
+    Set<String> getByteArrayKeys() {
+        return getTypeKeys(FPNTConstants.BYTE_ARRAY);
+    }
+
+    Set<String> getCharArrayKeys() {
+        return getTypeKeys(FPNTConstants.CHAR_ARRAY);
+    }
+
+    Set<String> getIntArrayKeys() {
+        return getTypeKeys(FPNTConstants.INT_ARRAY);
+    }
+
+    Set<String> getLongArrayKeys() {
+        return getTypeKeys(FPNTConstants.LONG_ARRAY);
+    }
+
+    Set<String> getStringKeys() {
+        return getTypeKeys(FPNTConstants.STRING);
     }
 
     @Override

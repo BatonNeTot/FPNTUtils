@@ -173,6 +173,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putInt(key, FPNTParser.parseInt(bytes));
                         }
+                        break;
                     }
                     case FPNTConstants.LONG:{
                         for (int i = 0; i < length; i++) {
@@ -191,6 +192,7 @@ public class FPNTDecoder {
                             input.read(bytes);
                             container.putBooleanArray(key, FPNTParser.parseBooleanArray(bytes, size));
                         }
+                        break;
                     }
                     case FPNTConstants.BYTE_ARRAY:{
                         for (int i = 0; i < length; i++) {
