@@ -1,7 +1,8 @@
 package com.notjuststudio.fpnt;
 
 /**
- * Created by George on 25.06.2017.
+ * FPNTConstants contains constants
+ * @author KLLdon
  */
 public class FPNTConstants {
 
@@ -26,6 +27,7 @@ public class FPNTConstants {
             CHAR_ARRAY = 7,
             INT_ARRAY = 8,
             LONG_ARRAY = 9,
-            STRING = 10;
+            STRING = 10,
+            STRING_ARRAY = 11;
 
 }

@@ -1,7 +1,7 @@
 package com.notjuststudio.fpnt;
 
 /**
- * Created by George on 25.06.2017.
+ * @author KLLdon
  */
 public class FPNTException extends RuntimeException {
 

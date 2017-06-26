@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FPNTUtils:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FPNTUtils_jar</output-path>
+    <root id="archive" name="FPNTUtils.jar">
+      <element id="module-output" name="FPNTUtils" />
+    </root>
+  </artifact>
+</component>

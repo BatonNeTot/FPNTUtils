@@ -1,9 +1,12 @@
 package com.notjuststudio.fpnt;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by George on 25.06.2017.
+ * FPNTParser have methods to parse values to bytes and
+ * @author KLLdon
  */
 public class FPNTParser {
 
@@ -24,6 +27,8 @@ public class FPNTParser {
             return parse((long[])value);
         } else if (value instanceof String) {
             return parse((String)value);
+        } else if (value instanceof String[]) {
+            return parse((String[])value);
         }
         return null;
     }
@@ -118,6 +123,25 @@ public class FPNTParser {
         return value.getBytes(StandardCharsets.UTF_8);
     }
 
+    public static byte[] parse(final String[] value) {
+        int sum = 0;
+        List<byte[]> bytes = new ArrayList<>();
+        for (String str : value) {
+            final byte[] string = parse(str);
+            sum += string.length + 4;
+            bytes.add(string);
+        }
+        final byte[] result = new byte[sum];
+        int count = 0;
+        for (byte[] array : bytes) {
+            for (byte values : parse(array.length))
+                result[count++] = values;
+            for (byte values : array)
+                result[count++] = values;
+        }
+        return result;
+    }
+
     public static boolean parseBoolean(final byte source) {
         return (source & 1) == 1;
     }
@@ -179,5 +203,26 @@ public class FPNTParser {
 
     public static String parseString(final byte[] source) {
         return new String(source, StandardCharsets.UTF_8);
+    }
+
+    public static String[] parseStringArray(final byte[] source) {
+        List<String> result = new ArrayList<>();
+        int count = 0;
+        final byte[] size = new byte[4];
+
+        while(count < source.length) {
+            for (int i = 0; i < 4; i++)
+                size[i] = source[count++];
+
+            final int length = parseInt(size);
+            final byte[] string = new byte[length];
+            for (int i = 0; i < length; i++) {
+                string[i] = source[count++];
+            }
+
+            result.add(parseString(string));
+        }
+
+        return result.toArray(new String[result.size()]);
     }
 }

@@ -6,20 +6,61 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by George on 25.06.2017.
+ * FPNTDecoder can read from FPNT, write to FPNT and check is file FPNT
+ * @author KLLdon
  */
 public class FPNTDecoder {
 
+    /**
+     * Check is file FPNT type
+     * @param file
+     * @return is file FPNT type
+     */
+    public static boolean checkFile(final File file) {
+        if (!file.exists() || !file.isFile())
+            return false;
+        final BufferedInputStream input;
+        try {
+            input = new BufferedInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        boolean flag = false;
+        try {
+            final byte[] data = new byte[2];
+            input.read(data);
+            char check = FPNTParser.parseChar(data);
+            flag = check == FPNTConstants.MAGIC_NUMBER;
+            input.close();
+        } catch (IOException e) {
+            return false;
+        }
+        return flag;
+    }
+
+    /**
+     * @see #write(File, FPNTContainer, boolean)
+     */
     public static void write(final File file, final FPNTContainer container) {
         write(file, container, false);
     }
 
+    /**
+     * Write FPNTContainer to file
+     * @param file target file
+     * @param container source FPNTContainer
+     * @param canBeOverwritten will be file overwritten, if already exist
+     */
     public static void write(final File file, final FPNTContainer container, final boolean canBeOverwritten) {
         if (!canBeOverwritten && file.exists())
             throw new FPNTException("File already exists");
         final BufferedOutputStream output;
         try {
             output = new BufferedOutputStream(new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new FPNTException(e);
+        }
+        try {
             output.write(FPNTConstants.MAGIC_NUMBER_ARRAY);
 
             maps:
@@ -27,7 +68,7 @@ public class FPNTDecoder {
                 output.write(map.getKey());
                 output.write(FPNTParser.parse(map.getValue().size()));
 
-                for (FPNTExpander expander : container.getExpander()) {
+                for (FPNTExpander expander : container.getExpanderList()) {
                     if (expander.write(output, map.getKey(), map.getValue().size(), container))
                         continue maps;
                 }
@@ -103,27 +144,64 @@ public class FPNTDecoder {
                         }
                         break;
                     }
+                    case FPNTConstants.STRING: {
+                        for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
+                            writeKey(output, entry.getKey());
+                            writeKey(output, (String)entry.getValue());
+                        }
+                        break;
+                    }
+                    case FPNTConstants.STRING_ARRAY: {
+                        for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
+                            writeKey(output, entry.getKey());
+                            final byte[] strings = FPNTParser.parse(entry.getValue());
+                            output.write(FPNTParser.parse(strings.length));
+                            output.write(strings);
+                        }
+                        break;
+                    }
                     default:
-                        break maps;
+                        throw new FPNTException("Can't write to file, unknown type " + Byte.toString(map.getKey()));
                 }
             }
 
-            output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        finally {
+            try {
+                output.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public static void writeKey(final BufferedOutputStream output, final String key) throws IOException {
+    /**
+     * Write String key in already opened outputStream
+     * @param output opened outputStream
+     * @param key
+     * @throws IOException can be thrown by outputStream.write()
+     */
+    public static void writeKey(final OutputStream output, final String key) throws IOException {
         final byte[] bytes = FPNTParser.parse(key);
         output.write(FPNTParser.parse(bytes.length));
         output.write(bytes);
     }
 
+    /**
+     * @see #read(File, FPNTContainer)
+     */
     public static FPNTContainer read(final File file) {
         return read(file, new FPNTContainer());
     }
 
+    /**
+     * Read file to FPNTContainer
+     * @param file
+     * @param container target FPNTContainer
+     * @return container
+     */
     public static FPNTContainer read(final File file, final FPNTContainer container) {
         final BufferedInputStream input;
         try {
@@ -145,7 +223,7 @@ public class FPNTDecoder {
                 input.read(count);
                 final int length = FPNTParser.parseInt(count);
 
-                for (FPNTExpander expander : container.getExpander()) {
+                for (FPNTExpander expander : container.getExpanderList()) {
                     if (expander.read(input, type, length, container))
                         continue maps;
                 }
@@ -248,19 +326,48 @@ public class FPNTDecoder {
                         }
                         break;
                     }
+                    case FPNTConstants.STRING: {
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            final String value = readKey(input);
+                            container.putString(key, value);
+                        }
+                        break;
+                    }
+                    case FPNTConstants.STRING_ARRAY: {
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            final int size = input.read(count);
+                            final byte[] bytes = new byte[size];
+                            input.read(bytes);
+                            container.putStringArray(key, FPNTParser.parseStringArray(bytes));
+                        }
+                        break;
+                    }
                     default:
-                        break maps;
+                        throw new FPNTException("Can't read file, unknown type " + Byte.toString(type));
                 }
             }
-            input.close();
-            return container;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        return container;
     }
 
-    public static String readKey(BufferedInputStream input) throws IOException {
+    /**
+     * Read String key from already opened inputStream
+     * @param input opened inputStream
+     * @return String key
+     * @throws IOException can be thrown by outputStream.write()
+     */
+    public static String readKey(final InputStream input) throws IOException {
         final byte[] size = new byte[4];
         input.read(size);
         final int length = FPNTParser.parseInt(size);
