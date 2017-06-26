@@ -27,6 +27,12 @@ public class FPNTDecoder {
             for (Map.Entry<Byte, Map<String, Object>> map : container.getMaps().entrySet()) {
                 output.write(map.getKey());
                 output.write(FPNTParser.parse(map.getValue().size()));
+
+                for (FPNTExpander expander : container.getExpander()) {
+                    if (expander.write(output, map.getKey(), map.getValue().size(), container))
+                        continue maps;
+                }
+
                 switch (map.getKey()) {
                     case FPNTConstants.BOOLEAN: {
                         final List<String> keys = new ArrayList<>(map.getValue().keySet());
@@ -109,13 +115,17 @@ public class FPNTDecoder {
         }
     }
 
-    private static void writeKey(final BufferedOutputStream output, final String key) throws IOException {
+    public static void writeKey(final BufferedOutputStream output, final String key) throws IOException {
         final byte[] bytes = FPNTParser.parse(key);
         output.write(FPNTParser.parse(bytes.length));
         output.write(bytes);
     }
 
     public static FPNTContainer read(final File file) {
+        return read(file, new FPNTContainer());
+    }
+
+    public static FPNTContainer read(final File file, final FPNTContainer container) {
         final BufferedInputStream input;
         try {
             input = new BufferedInputStream(new FileInputStream(file));
@@ -129,13 +139,18 @@ public class FPNTDecoder {
             if (check != FPNTConstants.MAGIC_NUMBER) {
                 throw new FPNTException("File is not FPNT type");
             }
-            final FPNTContainer container = new FPNTContainer();
             byte type;
             maps:
             while((type = (byte)input.read()) != -1) {
                 final byte[] count = new byte[4];
                 input.read(count);
                 final int length = FPNTParser.parseInt(count);
+
+                for (FPNTExpander expander : container.getExpander()) {
+                    if (expander.read(input, type, length, container))
+                        continue maps;
+                }
+
                 switch (type) {
                     case FPNTConstants.BOOLEAN:{
                         final String[] keys = new String[length];
@@ -246,7 +261,7 @@ public class FPNTDecoder {
         return null;
     }
 
-    private static String readKey(BufferedInputStream input) throws IOException {
+    public static String readKey(BufferedInputStream input) throws IOException {
         final byte[] size = new byte[4];
         input.read(size);
         final int length = FPNTParser.parseInt(size);

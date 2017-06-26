@@ -1,9 +1,6 @@
 package com.notjuststudio.fpnt;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by George on 25.06.2017.
@@ -11,9 +8,22 @@ import java.util.Set;
 public class FPNTContainer {
 
     private final Map<Byte, Map<String, Object>> maps = new HashMap<>();
+    private final List<FPNTExpander> expander = new ArrayList<>();
 
-    Map<Byte, Map<String, Object>> getMaps() {
+    public Map<Byte, Map<String, Object>> getMaps() {
         return maps;
+    }
+
+    public List<FPNTExpander> getExpander() {
+        return new ArrayList<>(expander);
+    }
+
+    public void addExpander(FPNTExpander expander) {
+        this.expander.add(expander);
+    }
+
+    public void removeExpander() {
+        expander.clear();
     }
 
     public FPNTContainer putValue(final String key, final Object value) {
@@ -43,57 +53,57 @@ public class FPNTContainer {
         return this;
     }
 
-    FPNTContainer putValue(final byte type, final String key, final Object value) {
+    public FPNTContainer putValue(final byte type, final String key, final Object value) {
         maps.computeIfAbsent(type, k -> new HashMap<>());
         maps.get(type).put(key, value);
         return this;
     }
 
-    FPNTContainer putBoolean(final String key, final boolean value) {
+    public FPNTContainer putBoolean(final String key, final boolean value) {
         return putValue(FPNTConstants.BOOLEAN, key, value);
     }
 
-    FPNTContainer putByte(final String key, final byte value) {
+    public FPNTContainer putByte(final String key, final byte value) {
         return putValue(FPNTConstants.BYTE, key, value);
     }
 
-    FPNTContainer putChar(final String key, final char value) {
+    public FPNTContainer putChar(final String key, final char value) {
         return putValue(FPNTConstants.CHAR, key, value);
     }
 
-    FPNTContainer putInt(final String key, final int value) {
+    public FPNTContainer putInt(final String key, final int value) {
         return putValue(FPNTConstants.INT, key, value);
     }
 
-    FPNTContainer putLong(final String key, final long value) {
+    public FPNTContainer putLong(final String key, final long value) {
         return putValue(FPNTConstants.LONG, key, value);
     }
 
-    FPNTContainer putBooleanArray(final String key, final boolean[] value) {
+    public FPNTContainer putBooleanArray(final String key, final boolean[] value) {
         return putValue(FPNTConstants.BOOLEAN_ARRAY, key, value);
     }
 
-    FPNTContainer putByteArray(final String key, final byte[] value) {
+    public FPNTContainer putByteArray(final String key, final byte[] value) {
         return putValue(FPNTConstants.BYTE_ARRAY, key, value);
     }
 
-    FPNTContainer putCharArray(final String key, final char[] value) {
+    public FPNTContainer putCharArray(final String key, final char[] value) {
         return putValue(FPNTConstants.CHAR_ARRAY, key, value);
     }
 
-    FPNTContainer putIntArray(final String key, final int[] value) {
+    public FPNTContainer putIntArray(final String key, final int[] value) {
         return putValue(FPNTConstants.INT_ARRAY, key, value);
     }
 
-    FPNTContainer putLongArray(final String key, final long[] value) {
+    public FPNTContainer putLongArray(final String key, final long[] value) {
         return putValue(FPNTConstants.LONG_ARRAY, key, value);
     }
 
-    FPNTContainer putString(final String key, final String value) {
+    public FPNTContainer putString(final String key, final String value) {
         return putValue(FPNTConstants.STRING, key, value);
     }
 
-    Object getValue(final String key) {
+    public Object getValue(final String key) {
         for (Map.Entry<Byte, Map<String, Object>> map : maps.entrySet()) {
             final Object value = map.getValue().get(key);
             if (value != null)
@@ -102,103 +112,103 @@ public class FPNTContainer {
         return null;
     }
 
-    Object getValue(final byte type, final String key) {
+    public Object getValue(final byte type, final String key) {
         return maps.get(type).get(key);
     }
 
-    boolean getBoolean(final String key) {
+    public boolean getBoolean(final String key) {
         return (boolean)getValue(FPNTConstants.BOOLEAN, key);
     }
 
-    byte getByte(final String key) {
+    public byte getByte(final String key) {
         return (byte)getValue(FPNTConstants.BYTE, key);
     }
 
-    char getChar(final String key) {
+    public char getChar(final String key) {
         return (char)getValue(FPNTConstants.CHAR, key);
     }
 
-    int getInt(final String key) {
+    public int getInt(final String key) {
         return (int)getValue(FPNTConstants.INT, key);
     }
 
-    long getLong(final String key) {
+    public long getLong(final String key) {
         return (long)getValue(FPNTConstants.LONG, key);
     }
 
-    boolean[] getBooleanArray(final String key) {
+    public boolean[] getBooleanArray(final String key) {
         return (boolean[])getValue(FPNTConstants.BOOLEAN_ARRAY, key);
     }
 
-    byte[] getByteArray(final String key) {
+    public byte[] getByteArray(final String key) {
         return (byte[])getValue(FPNTConstants.BYTE_ARRAY, key);
     }
 
-    char[] getCharArray(final String key) {
+    public char[] getCharArray(final String key) {
         return (char[])getValue(FPNTConstants.CHAR_ARRAY, key);
     }
 
-    int[] getIntArray(final String key) {
+    public int[] getIntArray(final String key) {
         return (int[])getValue(FPNTConstants.INT_ARRAY, key);
     }
 
-    long[] getLongArray(final String key) {
+    public long[] getLongArray(final String key) {
         return (long[])getValue(FPNTConstants.LONG_ARRAY, key);
     }
 
-    String getString(final String key) {
+    public String getString(final String key) {
         return (String)getValue(FPNTConstants.STRING, key);
     }
 
-    Set<Byte> getTypes() {
+    public Set<Byte> getTypes() {
         return maps.keySet();
     }
 
-    Set<String> getTypeKeys(final byte type) {
+    public Set<String> getTypeKeys(final byte type) {
         return maps.get(type).keySet();
     }
 
-    Set<String> getBooleanKeys() {
+    public Set<String> getBooleanKeys() {
         return getTypeKeys(FPNTConstants.BOOLEAN);
     }
 
-    Set<String> getByteKeys() {
+    public Set<String> getByteKeys() {
         return getTypeKeys(FPNTConstants.BYTE);
     }
 
-    Set<String> getCharKeys() {
+    public Set<String> getCharKeys() {
         return getTypeKeys(FPNTConstants.CHAR);
     }
 
-    Set<String> getIntKeys() {
+    public Set<String> getIntKeys() {
         return getTypeKeys(FPNTConstants.INT);
     }
 
-    Set<String> getLongKeys() {
+    public Set<String> getLongKeys() {
         return getTypeKeys(FPNTConstants.LONG);
     }
 
-    Set<String> getBooleaArraynKeys() {
+    public Set<String> getBooleaArraynKeys() {
         return getTypeKeys(FPNTConstants.BOOLEAN_ARRAY);
     }
 
-    Set<String> getByteArrayKeys() {
+    public Set<String> getByteArrayKeys() {
         return getTypeKeys(FPNTConstants.BYTE_ARRAY);
     }
 
-    Set<String> getCharArrayKeys() {
+    public Set<String> getCharArrayKeys() {
         return getTypeKeys(FPNTConstants.CHAR_ARRAY);
     }
 
-    Set<String> getIntArrayKeys() {
+    public Set<String> getIntArrayKeys() {
         return getTypeKeys(FPNTConstants.INT_ARRAY);
     }
 
-    Set<String> getLongArrayKeys() {
+    public Set<String> getLongArrayKeys() {
         return getTypeKeys(FPNTConstants.LONG_ARRAY);
     }
 
-    Set<String> getStringKeys() {
+    public Set<String> getStringKeys() {
         return getTypeKeys(FPNTConstants.STRING);
     }
 
