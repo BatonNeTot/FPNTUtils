@@ -22,6 +22,7 @@ public class Test {
         container.putByte("Byte_code", Byte.MAX_VALUE);
         container.putChar("Symbol", 'q');
         container.putInt("Size", 17);
+        container.putLong("My dick", 25);
         FPNTDecoder.write(new File("test.fpnt"), container, true);
         final FPNTContainer output = FPNTDecoder.read(new File("test.fpnt"));
         System.out.println(output);
