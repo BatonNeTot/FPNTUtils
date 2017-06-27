@@ -1,5 +1,7 @@
 package com.notjuststudio.fpnt;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,7 +21,7 @@ public interface FPNTExpander {
      * @return can current type be handle by method
      * @throws IOException can be thrown by outputStream
      */
-    boolean write(final OutputStream output, final byte type, final int count, final FPNTContainer container) throws IOException;
+    boolean write(@NotNull final OutputStream output,@NotNull  final byte type,@NotNull  final int count,@NotNull  final FPNTContainer container) throws IOException;
 
     /**
      * Custom read for FPNTDecoder
@@ -30,6 +32,6 @@ public interface FPNTExpander {
      * @return can current type be handle by method
      * @throws IOException can be thrown by inputStream
      */
-    boolean read(final InputStream input, final byte type, final int count, final FPNTContainer container) throws IOException;
+    boolean read(@NotNull final InputStream input,@NotNull  final byte type,@NotNull  final int count,@NotNull  final FPNTContainer container) throws IOException;
 
 }

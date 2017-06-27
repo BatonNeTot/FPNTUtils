@@ -10,10 +10,12 @@ public class FPNTConstants {
 
     public static final byte[] MAGIC_NUMBER_ARRAY;
 
+    public static final String EXTENSION = ".fpnt";
+
     static {
         MAGIC_NUMBER_ARRAY = new byte[2];
-        MAGIC_NUMBER_ARRAY[0] = (byte) (MAGIC_NUMBER >>> 8);
-        MAGIC_NUMBER_ARRAY[1] = (byte) (MAGIC_NUMBER);
+        MAGIC_NUMBER_ARRAY[0] = (byte) (MAGIC_NUMBER >> 8);
+        MAGIC_NUMBER_ARRAY[1] = (byte) (MAGIC_NUMBER & 0xff);
     }
 
     public static final byte

@@ -1,6 +1,7 @@
 package com.notjuststudio.fpnt;
 
 import com.notjuststudio.utils.ImageUtils;
+import com.sun.istack.internal.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class FPNTParser {
 
-    public static byte[] parse(final Object value) {
+    public static byte[] parse(@NotNull final Object value) {
         if (value instanceof Character) {
             return parse((char)value);
         } else if (value instanceof Integer) {
@@ -34,44 +35,48 @@ public class FPNTParser {
             return parse((String)value);
         } else if (value instanceof String[]) {
             return parse((String[])value);
+        } else if (value instanceof ByteBuffer) {
+            return parse((ByteBuffer)value);
+        } else if (value instanceof BufferedImage) {
+            return parse((BufferedImage)value);
         }
         return null;
     }
 
-    public static byte parse(final boolean value) {
+    public static byte parse(@NotNull final boolean value) {
         return (byte)(value ? 1 : 0);
     }
 
-    public static byte[] parse(final char value) {
+    public static byte[] parse(@NotNull final char value) {
         final byte[] bytes = new byte[2];
-        bytes[0] = (byte)(value >>> 8);
-        bytes[1] = (byte) value;
+        bytes[0] = (byte)((value >> 8) & 0xFF);
+        bytes[1] = (byte) (value & 0xFF);
         return bytes;
     }
 
-    public static byte[] parse(final int value) {
+    public static byte[] parse(@NotNull final int value) {
         final byte[] bytes = new byte[4];
-        bytes[0] = (byte)(value >>> 24);
-        bytes[1] = (byte)(value >>> 16);
-        bytes[2] = (byte)(value >>> 8);
-        bytes[3] = (byte) value;
+        bytes[0] = (byte)((value >> 24) & 0xFF);
+        bytes[1] = (byte)((value >> 16) & 0xFF);
+        bytes[2] = (byte)((value >> 8) & 0xFF);
+        bytes[3] = (byte) (value & 0xFF);
         return bytes;
     }
 
-    public static byte[] parse(final long value) {
+    public static byte[] parse(@NotNull final long value) {
         final byte[] bytes = new byte[8];
-        bytes[0] = (byte)(value >>> 56);
-        bytes[1] = (byte)(value >>> 48);
-        bytes[2] = (byte)(value >>> 40);
-        bytes[3] = (byte)(value >>> 32);
-        bytes[4] = (byte)(value >>> 24);
-        bytes[5] = (byte)(value >>> 16);
-        bytes[6] = (byte)(value >>> 8);
-        bytes[7] = (byte) value;
+        bytes[0] = (byte)((value >> 56) & 0xFF);
+        bytes[1] = (byte)((value >> 48) & 0xFF);
+        bytes[2] = (byte)((value >> 40) & 0xFF);
+        bytes[3] = (byte)((value >> 32) & 0xFF);
+        bytes[4] = (byte)((value >> 24) & 0xFF);
+        bytes[5] = (byte)((value >> 16) & 0xFF);
+        bytes[6] = (byte)((value >> 8) & 0xFF);
+        bytes[7] = (byte) (value & 0xFF);
         return bytes;
     }
 
-    public static byte[] parse(final boolean[] value) {
+    public static byte[] parse(@NotNull final boolean[] value) {
         final int length = value.length / 8 + ((value.length % 8) > 0 ? 1 : 0);
         final byte[] bytes = new byte[length];
         for (int i = 0; i < value.length; i++) {
@@ -80,7 +85,7 @@ public class FPNTParser {
         return bytes;
     }
 
-    public static byte[] parse(final char[] value) {
+    public static byte[] parse(@NotNull final char[] value) {
         final int length = value.length * 2;
         final byte[] bytes = new byte[length];
         for (int i = 0; i < value.length; i++) {
@@ -92,7 +97,7 @@ public class FPNTParser {
         return bytes;
     }
 
-    public static byte[] parse(final int[] value) {
+    public static byte[] parse(@NotNull final int[] value) {
         final int length = value.length * 4;
         final byte[] bytes = new byte[length];
         for (int i = 0; i < value.length; i++) {
@@ -106,7 +111,7 @@ public class FPNTParser {
         return bytes;
     }
 
-    public static byte[] parse(final long[] value) {
+    public static byte[] parse(@NotNull final long[] value) {
         final int length = value.length * 8;
         final byte[] bytes = new byte[length];
         for (int i = 0; i < value.length; i++) {
@@ -124,11 +129,11 @@ public class FPNTParser {
         return bytes;
     }
 
-    public static byte[] parse(final String value) {
+    public static byte[] parse(@NotNull final String value) {
         return value.getBytes(StandardCharsets.UTF_8);
     }
 
-    public static byte[] parse(final String[] value) {
+    public static byte[] parse(@NotNull final String[] value) {
         int sum = 0;
         List<byte[]> bytes = new ArrayList<>();
         for (String str : value) {
@@ -147,31 +152,31 @@ public class FPNTParser {
         return result;
     }
 
-    public static boolean parseBoolean(final byte source) {
+    public static boolean parseBoolean(@NotNull final byte source) {
         return (source & 1) == 1;
     }
 
-    public static char parseChar(final byte[] source) {
-        return (char)(((char)source[0] << 8) | ((char)source[1]));
+    public static char parseChar(@NotNull final byte[] source) {
+        return (char)((((char)source[0] & 0xFF) << 8) | ((char)source[1] & 0xFF));
     }
 
-    public static int parseInt(final byte[] source) {
-        return (source[0] << 24) | (source[1] << 16) | (source[2] << 8) | (source[3]);
+    public static int parseInt(@NotNull final byte[] source) {
+        return (((int)source[0] & 0xFF) << 24) | (((int)source[1] & 0xFF) << 16) | (((int)source[2] & 0xFF) << 8) | ((int)source[3] & 0xFF);
     }
 
-    public static long parseLong(final byte[] source) {
-        return ((long)source[0] << 56) | ((long)source[1] << 48) | ((long)source[2] << 40) | ((long)source[3] << 32) | ((long)source[4] << 24) | ((long)source[5] << 16) | ((long)source[6] << 8) | ((long)source[7]);
+    public static long parseLong(@NotNull final byte[] source) {
+        return (((long)source[0] & 0xFF) << 56) | (((long)source[1] & 0xFF)  << 48)| (((long)source[2] & 0xFF) << 40) | (((long)source[3] & 0xFF) << 32) | (((long)source[4] & 0xFF) << 24) | (((long)source[5] & 0xFF) << 16) | (((long)source[6] & 0xFF) << 8) | (((long)source[7]) & 0xFF);
     }
 
-    public static boolean[] parseBooleanArray(final byte[] source, final int length) {
+    public static boolean[] parseBooleanArray(@NotNull final byte[] source,@NotNull  final int length) {
         final boolean[] booleans = new boolean[length];
         for (int i = 0; i < length; i++) {
-            booleans[i] = parseBoolean((byte)(source[i / 8] >>> (7 - (i % 8))));
+            booleans[i] = parseBoolean((byte)(source[i / 8] >> (7 - (i % 8))));
         }
         return booleans;
     }
 
-    public static boolean[] parseBooleanArray(final Object[] source) {
+    public static boolean[] parseBooleanArray(@NotNull final Object[] source) {
         final boolean[] booleans = new boolean[source.length];
         for (int i = 0; i < source.length; i++) {
             booleans[i] = (boolean)source[i];
@@ -179,7 +184,7 @@ public class FPNTParser {
         return booleans;
     }
 
-    public static char[] parseCharArray(final byte[] source) {
+    public static char[] parseCharArray(@NotNull final byte[] source) {
         final char[] chars = new char[source.length / 2];
         for (int i = 0; i < chars.length; i++) {
             final int offset = i * 2;
@@ -188,7 +193,7 @@ public class FPNTParser {
         return chars;
     }
 
-    public static int[] parseIntArray(final byte[] source) {
+    public static int[] parseIntArray(@NotNull final byte[] source) {
         final int[] ints = new int[source.length / 4];
         for (int i = 0; i < ints.length; i++) {
             final int offset = i * 4;
@@ -197,7 +202,7 @@ public class FPNTParser {
         return ints;
     }
 
-    public static long[] parseLongArray(final byte[] source) {
+    public static long[] parseLongArray(@NotNull final byte[] source) {
         final long[] longs = new long[source.length / 8];
         for (int i = 0; i < longs.length; i++) {
             final int offset = i * 8;
@@ -206,11 +211,11 @@ public class FPNTParser {
         return longs;
     }
 
-    public static String parseString(final byte[] source) {
+    public static String parseString(@NotNull final byte[] source) {
         return new String(source, StandardCharsets.UTF_8);
     }
 
-    public static String[] parseStringArray(final byte[] source) {
+    public static String[] parseStringArray(@NotNull final byte[] source) {
         List<String> result = new ArrayList<>();
         int count = 0;
         final byte[] size = new byte[4];
@@ -231,18 +236,18 @@ public class FPNTParser {
         return result.toArray(new String[result.size()]);
     }
 
-    public static byte[] parse(final ByteBuffer buffer) {
+    public static byte[] parse(@NotNull final ByteBuffer buffer) {
         byte[] buffered = new byte[buffer.remaining()];
         buffer.get(buffered);
         buffer.position(0);
         return  buffered;
     }
 
-    public static ByteBuffer parseByteBuffer(final byte[] data) {
+    public static ByteBuffer parseByteBuffer(@NotNull final byte[] data) {
         return (ByteBuffer) ByteBuffer.allocateDirect(data.length).order(ByteOrder.nativeOrder()).put(data).flip();
     }
 
-    public static byte[] parse(final BufferedImage image) {
+    public static byte[] parse(@NotNull final BufferedImage image) {
         final byte[] source = ImageUtils.imageToArray(image);
         final byte[] bytes = new byte[source.length + 8];
         final byte[] width = parse(image.getWidth());
@@ -257,7 +262,7 @@ public class FPNTParser {
         return bytes;
     }
 
-    public static BufferedImage parseBufferedImage(final byte[] source) {
+    public static BufferedImage parseBufferedImage(@NotNull final byte[] source) {
         final byte[] width = new byte[4];
         final byte[] height = new byte[4];
         final byte[] bytes = new byte[source.length - 8];

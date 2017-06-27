@@ -1,5 +1,7 @@
 package com.notjuststudio.fpnt;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ public class FPNTDecoder {
      * @param file
      * @return is file FPNT type
      */
-    public static boolean checkFile(final File file) {
+    public static boolean checkFile(@NotNull final File file) {
         if (!file.exists() || !file.isFile())
             return false;
         final BufferedInputStream input;
@@ -41,7 +43,7 @@ public class FPNTDecoder {
     /**
      * @see #write(File, FPNTContainer, boolean)
      */
-    public static void write(final File file, final FPNTContainer container) {
+    public static void write(@NotNull final File file,@NotNull  final FPNTContainer container) {
         write(file, container, false);
     }
 
@@ -51,7 +53,7 @@ public class FPNTDecoder {
      * @param container source FPNTContainer
      * @param canBeOverwritten will be file overwritten, if already exist
      */
-    public static void write(final File file, final FPNTContainer container, final boolean canBeOverwritten) {
+    public static void write(@NotNull final File file,@NotNull  final FPNTContainer container,@NotNull  final boolean canBeOverwritten) {
         if (!canBeOverwritten && file.exists())
             throw new FPNTException("File already exists");
         final BufferedOutputStream output;
@@ -62,6 +64,7 @@ public class FPNTDecoder {
         }
         try {
             output.write(FPNTConstants.MAGIC_NUMBER_ARRAY);
+            output.write(FPNTParser.parse(container.getVersion()));
 
             maps:
             for (Map.Entry<Byte, Map<String, Object>> map : container.getMaps().entrySet()) {
@@ -201,7 +204,7 @@ public class FPNTDecoder {
      * @param key
      * @throws IOException can be thrown by outputStream.write()
      */
-    public static void writeKey(final OutputStream output, final String key) throws IOException {
+    public static void writeKey(@NotNull final OutputStream output,@NotNull  final String key) throws IOException {
         final byte[] bytes = FPNTParser.parse(key);
         output.write(FPNTParser.parse(bytes.length));
         output.write(bytes);
@@ -210,7 +213,7 @@ public class FPNTDecoder {
     /**
      * @see #read(File, FPNTContainer)
      */
-    public static FPNTContainer read(final File file) {
+    public static FPNTContainer read(@NotNull final File file) {
         return read(file, new FPNTContainer());
     }
 
@@ -220,7 +223,7 @@ public class FPNTDecoder {
      * @param container target FPNTContainer
      * @return container
      */
-    public static FPNTContainer read(final File file, final FPNTContainer container) {
+    public static FPNTContainer read(@NotNull final File file, @NotNull final FPNTContainer container) {
         final BufferedInputStream input;
         try {
             input = new BufferedInputStream(new FileInputStream(file));
@@ -234,6 +237,9 @@ public class FPNTDecoder {
             if (check != FPNTConstants.MAGIC_NUMBER) {
                 throw new FPNTException("File is not FPNT type");
             }
+            final byte[] version = new byte[4];
+            input.read(version);
+            container.setVersion(FPNTParser.parseInt(version));
             byte type;
             maps:
             while((type = (byte)input.read()) != -1) {
@@ -396,7 +402,6 @@ public class FPNTDecoder {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         } finally {
             try {
                 input.close();
@@ -413,7 +418,7 @@ public class FPNTDecoder {
      * @return String key
      * @throws IOException can be thrown by outputStream.write()
      */
-    public static String readKey(final InputStream input) throws IOException {
+    public static String readKey(@NotNull final InputStream input) throws IOException {
         final byte[] size = new byte[4];
         input.read(size);
         final int length = FPNTParser.parseInt(size);

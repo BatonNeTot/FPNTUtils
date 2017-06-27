@@ -1,5 +1,7 @@
 package com.notjuststudio.fpnt;
 
+import com.sun.istack.internal.NotNull;
+
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -11,9 +13,26 @@ public class FPNTContainer {
 
     private final Map<Byte, Map<String, Object>> maps = new HashMap<>();
     private final List<FPNTExpander> expanderList = new ArrayList<>();
+    private int version = 0;
 
     /**
-     * Get map of map
+     * Get version
+     * @return
+     */
+    public int getVersion() {
+        return version;
+    }
+
+    /**
+     * Set version
+     * @param version
+     */
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    /**
+     * Get map of maps
      * @return
      */
     public Map<Byte, Map<String, Object>> getMaps() {
@@ -29,7 +48,7 @@ public class FPNTContainer {
      * Constructor with custom Expander
      * @param expander
      */
-    public FPNTContainer(FPNTExpander expander) {
+    public FPNTContainer(@NotNull final FPNTExpander expander) {
         addExpander(expander);
     }
 
@@ -37,7 +56,7 @@ public class FPNTContainer {
      * Constructor with custom ExpanderList
      * @param expanderList
      */
-    public FPNTContainer(List<FPNTExpander> expanderList) {
+    public FPNTContainer(@NotNull final List<FPNTExpander> expanderList) {
         this.expanderList.addAll(expanderList);
     }
 
@@ -53,7 +72,7 @@ public class FPNTContainer {
      * Add custom Expander
      * @param expander
      */
-    public void addExpander(FPNTExpander expander) {
+    public void addExpander(@NotNull final FPNTExpander expander) {
         this.expanderList.add(expander);
     }
 
@@ -70,7 +89,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putValue(final String key, final Object value) {
+    public FPNTContainer putValue(@NotNull final String key, @NotNull final Object value) {
         if (value instanceof Boolean) {
             putBoolean(key, (boolean) value);
         } else if (value instanceof Byte) {
@@ -110,7 +129,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putValue(final byte type, final String key, final Object value) {
+    public FPNTContainer putValue(@NotNull final byte type, @NotNull final String key, @NotNull final Object value) {
         maps.computeIfAbsent(type, k -> new HashMap<>());
         maps.get(type).put(key, value);
         return this;
@@ -122,7 +141,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putBoolean(final String key, final boolean value) {
+    public FPNTContainer putBoolean(@NotNull final String key, @NotNull final boolean value) {
         return putValue(FPNTConstants.BOOLEAN, key, value);
     }
 
@@ -132,7 +151,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putByte(final String key, final byte value) {
+    public FPNTContainer putByte(@NotNull final String key, @NotNull final byte value) {
         return putValue(FPNTConstants.BYTE, key, value);
     }
 
@@ -142,7 +161,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putChar(final String key, final char value) {
+    public FPNTContainer putChar(@NotNull final String key, @NotNull final char value) {
         return putValue(FPNTConstants.CHAR, key, value);
     }
 
@@ -152,7 +171,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putInt(final String key, final int value) {
+    public FPNTContainer putInt(@NotNull final String key, @NotNull final int value) {
         return putValue(FPNTConstants.INT, key, value);
     }
 
@@ -162,7 +181,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putLong(final String key, final long value) {
+    public FPNTContainer putLong(@NotNull final String key, @NotNull final long value) {
         return putValue(FPNTConstants.LONG, key, value);
     }
 
@@ -172,7 +191,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putBooleanArray(final String key, final boolean[] value) {
+    public FPNTContainer putBooleanArray(@NotNull final String key, @NotNull final boolean[] value) {
         return putValue(FPNTConstants.BOOLEAN_ARRAY, key, value);
     }
 
@@ -182,7 +201,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putByteArray(final String key, final byte[] value) {
+    public FPNTContainer putByteArray(@NotNull final String key, @NotNull final byte[] value) {
         return putValue(FPNTConstants.BYTE_ARRAY, key, value);
     }
 
@@ -192,7 +211,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putCharArray(final String key, final char[] value) {
+    public FPNTContainer putCharArray(@NotNull final String key, @NotNull final char[] value) {
         return putValue(FPNTConstants.CHAR_ARRAY, key, value);
     }
 
@@ -202,7 +221,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putIntArray(final String key, final int[] value) {
+    public FPNTContainer putIntArray(@NotNull final String key, @NotNull final int[] value) {
         return putValue(FPNTConstants.INT_ARRAY, key, value);
     }
 
@@ -212,7 +231,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putLongArray(final String key, final long[] value) {
+    public FPNTContainer putLongArray(@NotNull final String key, @NotNull final long[] value) {
         return putValue(FPNTConstants.LONG_ARRAY, key, value);
     }
 
@@ -222,7 +241,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putString(final String key, final String value) {
+    public FPNTContainer putString(@NotNull final String key, @NotNull final String value) {
         return putValue(FPNTConstants.STRING, key, value);
     }
 
@@ -232,7 +251,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putStringArray(final String key, final String[] value) {
+    public FPNTContainer putStringArray(@NotNull final String key, @NotNull final String[] value) {
         return putValue(FPNTConstants.STRING_ARRAY, key, value);
     }
 
@@ -242,7 +261,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putByteBuffer(final String key, final ByteBuffer value) {
+    public FPNTContainer putByteBuffer(@NotNull final String key, @NotNull final ByteBuffer value) {
         return putValue(FPNTConstants.BYTE_BUFFER, key, value);
     }
 
@@ -252,7 +271,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putBufferedImage(final String key, final BufferedImage value) {
+    public FPNTContainer putBufferedImage(@NotNull final String key, @NotNull final BufferedImage value) {
         return putValue(FPNTConstants.BUFFERED_IMAGE, key, value);
     }
 
@@ -261,7 +280,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public Object getValue(final String key) {
+    public Object getValue(@NotNull final String key) {
         for (Map.Entry<Byte, Map<String, Object>> map : maps.entrySet()) {
             final Object value = map.getValue().get(key);
             if (value != null)
@@ -276,7 +295,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public Object getValue(final byte type, final String key) {
+    public Object getValue(@NotNull final byte type, @NotNull final String key) {
         return maps.get(type).get(key);
     }
 
@@ -285,7 +304,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public boolean getBoolean(final String key) {
+    public boolean getBoolean(@NotNull final String key) {
         return (boolean)getValue(FPNTConstants.BOOLEAN, key);
     }
 
@@ -294,7 +313,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public byte getByte(final String key) {
+    public byte getByte(@NotNull final String key) {
         return (byte)getValue(FPNTConstants.BYTE, key);
     }
 
@@ -303,7 +322,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public char getChar(final String key) {
+    public char getChar(@NotNull final String key) {
         return (char)getValue(FPNTConstants.CHAR, key);
     }
 
@@ -312,7 +331,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public int getInt(final String key) {
+    public int getInt(@NotNull final String key) {
         return (int)getValue(FPNTConstants.INT, key);
     }
 
@@ -321,7 +340,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public long getLong(final String key) {
+    public long getLong(@NotNull final String key) {
         return (long)getValue(FPNTConstants.LONG, key);
     }
 
@@ -330,7 +349,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public boolean[] getBooleanArray(final String key) {
+    public boolean[] getBooleanArray(@NotNull final String key) {
         return (boolean[])getValue(FPNTConstants.BOOLEAN_ARRAY, key);
     }
 
@@ -339,7 +358,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public byte[] getByteArray(final String key) {
+    public byte[] getByteArray(@NotNull final String key) {
         return (byte[])getValue(FPNTConstants.BYTE_ARRAY, key);
     }
 
@@ -348,7 +367,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public char[] getCharArray(final String key) {
+    public char[] getCharArray(@NotNull final String key) {
         return (char[])getValue(FPNTConstants.CHAR_ARRAY, key);
     }
 
@@ -357,7 +376,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public int[] getIntArray(final String key) {
+    public int[] getIntArray(@NotNull final String key) {
         return (int[])getValue(FPNTConstants.INT_ARRAY, key);
     }
 
@@ -366,7 +385,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public long[] getLongArray(final String key) {
+    public long[] getLongArray(@NotNull final String key) {
         return (long[])getValue(FPNTConstants.LONG_ARRAY, key);
     }
 
@@ -375,7 +394,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public String getString(final String key) {
+    public String getString(@NotNull final String key) {
         return (String)getValue(FPNTConstants.STRING, key);
     }
 
@@ -384,7 +403,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public String[] getStringArray(final String key) {
+    public String[] getStringArray(@NotNull final String key) {
         return (String[])getValue(FPNTConstants.STRING_ARRAY, key);
     }
 
@@ -393,7 +412,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public String[] getByteBuffer(final String key) {
+    public String[] getByteBuffer(@NotNull final String key) {
         return (String[])getValue(FPNTConstants.BYTE_BUFFER, key);
     }
 
@@ -402,7 +421,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public String[] getBufferedImage(final String key) {
+    public String[] getBufferedImage(@NotNull final String key) {
         return (String[])getValue(FPNTConstants.BUFFERED_IMAGE, key);
     }
 
@@ -419,7 +438,7 @@ public class FPNTContainer {
      * @param type byte key
      * @return
      */
-    public Set<String> getTypeKeys(final byte type) {
+    public Set<String> getTypeKeys(@NotNull final byte type) {
         return maps.get(type).keySet();
     }
 
