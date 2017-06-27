@@ -28,6 +28,8 @@ public class FPNTConstants {
             INT_ARRAY = 8,
             LONG_ARRAY = 9,
             STRING = 10,
-            STRING_ARRAY = 11;
+            STRING_ARRAY = 11,
+            BYTE_BUFFER = 12,
+            BUFFERED_IMAGE = 13;
 
 }

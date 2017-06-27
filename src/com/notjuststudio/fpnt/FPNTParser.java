@@ -1,5 +1,10 @@
 package com.notjuststudio.fpnt;
 
+import com.notjuststudio.utils.ImageUtils;
+
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,29 +44,29 @@ public class FPNTParser {
 
     public static byte[] parse(final char value) {
         final byte[] bytes = new byte[2];
-        bytes[0] = (byte)(value << 8);
+        bytes[0] = (byte)(value >>> 8);
         bytes[1] = (byte) value;
         return bytes;
     }
 
     public static byte[] parse(final int value) {
         final byte[] bytes = new byte[4];
-        bytes[0] = (byte)(value << 24);
-        bytes[1] = (byte)(value << 16);
-        bytes[2] = (byte)(value << 8);
+        bytes[0] = (byte)(value >>> 24);
+        bytes[1] = (byte)(value >>> 16);
+        bytes[2] = (byte)(value >>> 8);
         bytes[3] = (byte) value;
         return bytes;
     }
 
     public static byte[] parse(final long value) {
         final byte[] bytes = new byte[8];
-        bytes[0] = (byte)(value << 56);
-        bytes[1] = (byte)(value << 48);
-        bytes[2] = (byte)(value << 40);
-        bytes[3] = (byte)(value << 32);
-        bytes[4] = (byte)(value << 24);
-        bytes[5] = (byte)(value << 16);
-        bytes[6] = (byte)(value << 8);
+        bytes[0] = (byte)(value >>> 56);
+        bytes[1] = (byte)(value >>> 48);
+        bytes[2] = (byte)(value >>> 40);
+        bytes[3] = (byte)(value >>> 32);
+        bytes[4] = (byte)(value >>> 24);
+        bytes[5] = (byte)(value >>> 16);
+        bytes[6] = (byte)(value >>> 8);
         bytes[7] = (byte) value;
         return bytes;
     }
@@ -224,5 +229,45 @@ public class FPNTParser {
         }
 
         return result.toArray(new String[result.size()]);
+    }
+
+    public static byte[] parse(final ByteBuffer buffer) {
+        byte[] buffered = new byte[buffer.remaining()];
+        buffer.get(buffered);
+        buffer.position(0);
+        return  buffered;
+    }
+
+    public static ByteBuffer parseByteBuffer(final byte[] data) {
+        return (ByteBuffer) ByteBuffer.allocateDirect(data.length).order(ByteOrder.nativeOrder()).put(data).flip();
+    }
+
+    public static byte[] parse(final BufferedImage image) {
+        final byte[] source = ImageUtils.imageToArray(image);
+        final byte[] bytes = new byte[source.length + 8];
+        final byte[] width = parse(image.getWidth());
+        final byte[] height = parse(image.getHeight());
+        for (int i = 0; i < 4; i++) {
+            bytes[i] = width[i];
+            bytes[i + 4] = height[i];
+        }
+        for (int i = 0; i < source.length; i++) {
+            bytes[i + 8] = source[i];
+        }
+        return bytes;
+    }
+
+    public static BufferedImage parseBufferedImage(final byte[] source) {
+        final byte[] width = new byte[4];
+        final byte[] height = new byte[4];
+        final byte[] bytes = new byte[source.length - 8];
+        for (int i = 0; i < 4; i++) {
+            width[i] = source[i];
+            height[i] = source[i + 4];
+        }
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = source[i + 8];
+        }
+        return ImageUtils.arrayToImage(bytes, parseInt(width), parseInt(height));
     }
 }

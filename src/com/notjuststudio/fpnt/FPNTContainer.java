@@ -1,5 +1,7 @@
 package com.notjuststudio.fpnt;
 
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
@@ -93,6 +95,10 @@ public class FPNTContainer {
             putString(key, (String) value);
         } else if (value instanceof String[]) {
             putStringArray(key, (String[]) value);
+        } else if (value instanceof ByteBuffer) {
+            putByteBuffer(key, (ByteBuffer) value);
+        } else if (value instanceof BufferedImage) {
+            putBufferedImage(key, (BufferedImage) value);
         }
         return this;
     }
@@ -231,6 +237,26 @@ public class FPNTContainer {
     }
 
     /**
+     * Put value in map by key
+     * @param key
+     * @param value
+     * @return this
+     */
+    public FPNTContainer putByteBuffer(final String key, final ByteBuffer value) {
+        return putValue(FPNTConstants.BYTE_BUFFER, key, value);
+    }
+
+    /**
+     * Put value in map by key
+     * @param key
+     * @param value
+     * @return this
+     */
+    public FPNTContainer putBufferedImage(final String key, final BufferedImage value) {
+        return putValue(FPNTConstants.BUFFERED_IMAGE, key, value);
+    }
+
+    /**
      * Get first value from maps by key
      * @param key
      * @return value
@@ -360,6 +386,24 @@ public class FPNTContainer {
      */
     public String[] getStringArray(final String key) {
         return (String[])getValue(FPNTConstants.STRING_ARRAY, key);
+    }
+
+    /**
+     * Get value by key
+     * @param key
+     * @return value
+     */
+    public String[] getByteBuffer(final String key) {
+        return (String[])getValue(FPNTConstants.BYTE_BUFFER, key);
+    }
+
+    /**
+     * Get value by key
+     * @param key
+     * @return value
+     */
+    public String[] getBufferedImage(final String key) {
+        return (String[])getValue(FPNTConstants.BUFFERED_IMAGE, key);
     }
 
     /**
@@ -516,7 +560,7 @@ public class FPNTContainer {
                     break;
                 }
                 default: {
-                    name = "None";
+                    name = Byte.toString(entry.getKey());
                 }
             }
             builder.append(name).append(":").append(entry.getValue().size());

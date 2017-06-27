@@ -160,6 +160,24 @@ public class FPNTDecoder {
                         }
                         break;
                     }
+                    case FPNTConstants.BYTE_BUFFER: {
+                        for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
+                            writeKey(output, entry.getKey());
+                            final byte[] bytes = FPNTParser.parse(entry.getValue());
+                            output.write(FPNTParser.parse(bytes.length));
+                            output.write(bytes);
+                        }
+                        break;
+                    }
+                    case FPNTConstants.BUFFERED_IMAGE: {
+                        for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
+                            writeKey(output, entry.getKey());
+                            final byte[] bytes = FPNTParser.parse(entry.getValue());
+                            output.write(FPNTParser.parse(bytes.length));
+                            output.write(bytes);
+                        }
+                        break;
+                    }
                     default:
                         throw new FPNTException("Can't write to file, unknown type " + Byte.toString(map.getKey()));
                 }
@@ -279,7 +297,8 @@ public class FPNTDecoder {
                     case FPNTConstants.BOOLEAN_ARRAY:{
                         for (int i = 0; i < length; i++) {
                             final String key = readKey(input);
-                            final int size = input.read(count);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size / 8 + ((size % 8) > 0 ? 1 : 0)];
                             input.read(bytes);
                             container.putBooleanArray(key, FPNTParser.parseBooleanArray(bytes, size));
@@ -289,7 +308,8 @@ public class FPNTDecoder {
                     case FPNTConstants.BYTE_ARRAY:{
                         for (int i = 0; i < length; i++) {
                             final String key = readKey(input);
-                            final int size = input.read(count);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
                             input.read(bytes);
                             container.putByteArray(key, bytes);
@@ -299,7 +319,8 @@ public class FPNTDecoder {
                     case FPNTConstants.CHAR_ARRAY:{
                         for (int i = 0; i < length; i++) {
                             final String key = readKey(input);
-                            final int size = input.read(count);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 2];
                             input.read(bytes);
                             container.putCharArray(key, FPNTParser.parseCharArray(bytes));
@@ -309,7 +330,8 @@ public class FPNTDecoder {
                     case FPNTConstants.INT_ARRAY:{
                         for (int i = 0; i < length; i++) {
                             final String key = readKey(input);
-                            final int size = input.read(count);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 4];
                             input.read(bytes);
                             container.putIntArray(key, FPNTParser.parseIntArray(bytes));
@@ -319,7 +341,8 @@ public class FPNTDecoder {
                     case FPNTConstants.LONG_ARRAY:{
                         for (int i = 0; i < length; i++) {
                             final String key = readKey(input);
-                            final int size = input.read(count);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 8];
                             input.read(bytes);
                             container.putLongArray(key, FPNTParser.parseLongArray(bytes));
@@ -337,10 +360,33 @@ public class FPNTDecoder {
                     case FPNTConstants.STRING_ARRAY: {
                         for (int i = 0; i < length; i++) {
                             final String key = readKey(input);
-                            final int size = input.read(count);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
                             input.read(bytes);
                             container.putStringArray(key, FPNTParser.parseStringArray(bytes));
+                        }
+                        break;
+                    }
+                    case FPNTConstants.BYTE_BUFFER:{
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
+                            final byte[] bytes = new byte[size];
+                            input.read(bytes);
+                            container.putByteBuffer(key, FPNTParser.parseByteBuffer(bytes));
+                        }
+                        break;
+                    }
+                    case FPNTConstants.BUFFERED_IMAGE:{
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
+                            final byte[] bytes = new byte[size];
+                            input.read(bytes);
+                            container.putBufferedImage(key, FPNTParser.parseBufferedImage(bytes));
                         }
                         break;
                     }
