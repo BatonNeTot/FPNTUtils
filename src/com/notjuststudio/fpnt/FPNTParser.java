@@ -23,6 +23,10 @@ public class FPNTParser {
             return parse((int)value);
         } else if (value instanceof Long) {
             return parse((long)value);
+        } else if (value instanceof Float) {
+            return parse((float)value);
+        } else if (value instanceof Double) {
+            return parse((double)value);
         } else if (value instanceof boolean[]) {
             return parse((boolean[])value);
         }else if (value instanceof char[]) {
@@ -31,6 +35,10 @@ public class FPNTParser {
             return parse((int[])value);
         } else if (value instanceof long[]) {
             return parse((long[])value);
+        } else if (value instanceof float[]) {
+            return parse((float[])value);
+        } else if (value instanceof double[]) {
+            return parse((double[])value);
         } else if (value instanceof String) {
             return parse((String)value);
         } else if (value instanceof String[]) {
@@ -76,6 +84,14 @@ public class FPNTParser {
         return bytes;
     }
 
+    public static byte[] parse(@NotNull final float value) {
+        return parse(Float.floatToRawIntBits(value));
+    }
+
+    public static byte[] parse(@NotNull final double value) {
+        return parse(Double.doubleToRawLongBits(value));
+    }
+
     public static byte[] parse(@NotNull final boolean[] value) {
         final int length = value.length / 8 + ((value.length % 8) > 0 ? 1 : 0);
         final byte[] bytes = new byte[length];
@@ -112,6 +128,38 @@ public class FPNTParser {
     }
 
     public static byte[] parse(@NotNull final long[] value) {
+        final int length = value.length * 8;
+        final byte[] bytes = new byte[length];
+        for (int i = 0; i < value.length; i++) {
+            final byte[] tmp = parse(value[i]);
+            final int offset = i * 8;
+            bytes[offset] = tmp[0];
+            bytes[offset + 1] = tmp[1];
+            bytes[offset + 2] = tmp[2];
+            bytes[offset + 3] = tmp[3];
+            bytes[offset + 4] = tmp[4];
+            bytes[offset + 5] = tmp[5];
+            bytes[offset + 6] = tmp[6];
+            bytes[offset + 7] = tmp[7];
+        }
+        return bytes;
+    }
+
+    public static byte[] parse(@NotNull final float[] value) {
+        final int length = value.length * 4;
+        final byte[] bytes = new byte[length];
+        for (int i = 0; i < value.length; i++) {
+            final byte[] tmp = parse(value[i]);
+            final int offset = i * 4;
+            bytes[offset] = tmp[0];
+            bytes[offset + 1] = tmp[1];
+            bytes[offset + 2] = tmp[2];
+            bytes[offset + 3] = tmp[3];
+        }
+        return bytes;
+    }
+
+    public static byte[] parse(@NotNull final double[] value) {
         final int length = value.length * 8;
         final byte[] bytes = new byte[length];
         for (int i = 0; i < value.length; i++) {
@@ -168,6 +216,14 @@ public class FPNTParser {
         return (((long)source[0] & 0xFF) << 56) | (((long)source[1] & 0xFF)  << 48)| (((long)source[2] & 0xFF) << 40) | (((long)source[3] & 0xFF) << 32) | (((long)source[4] & 0xFF) << 24) | (((long)source[5] & 0xFF) << 16) | (((long)source[6] & 0xFF) << 8) | (((long)source[7]) & 0xFF);
     }
 
+    public static float parseFloat(@NotNull final byte[] source) {
+        return Float.intBitsToFloat(parseInt(source));
+    }
+
+    public static double parseDouble(@NotNull final byte[] source) {
+        return Double.longBitsToDouble(parseLong(source));
+    }
+
     public static boolean[] parseBooleanArray(@NotNull final byte[] source,@NotNull  final int length) {
         final boolean[] booleans = new boolean[length];
         for (int i = 0; i < length; i++) {
@@ -209,6 +265,24 @@ public class FPNTParser {
             longs[i] = parseLong(new byte[]{source[offset], source[offset + 1], source[offset + 2], source[offset + 3], source[offset + 4], source[offset + 5], source[offset + 6], source[offset + 7]});
         }
         return longs;
+    }
+
+    public static float[] parseFloatArray(@NotNull final byte[] source) {
+        final float[] floats = new float[source.length / 4];
+        for (int i = 0; i < floats.length; i++) {
+            final int offset = i * 4;
+            floats[i] = parseFloat(new byte[]{source[offset], source[offset + 1], source[offset + 2], source[offset + 3]});
+        }
+        return floats;
+    }
+
+    public static double[] parseDoubleArray(@NotNull final byte[] source) {
+        final double[] doubles = new double[source.length / 8];
+        for (int i = 0; i < doubles.length; i++) {
+            final int offset = i * 8;
+            doubles[i] = parseDouble(new byte[]{source[offset], source[offset + 1], source[offset + 2], source[offset + 3], source[offset + 4], source[offset + 5], source[offset + 6], source[offset + 7]});
+        }
+        return doubles;
     }
 
     public static String parseString(@NotNull final byte[] source) {

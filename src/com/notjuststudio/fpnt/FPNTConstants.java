@@ -24,14 +24,18 @@ public class FPNTConstants {
             CHAR = 2,
             INT = 3,
             LONG = 4,
-            BOOLEAN_ARRAY = 5,
-            BYTE_ARRAY = 6,
-            CHAR_ARRAY = 7,
-            INT_ARRAY = 8,
-            LONG_ARRAY = 9,
-            STRING = 10,
-            STRING_ARRAY = 11,
-            BYTE_BUFFER = 12,
-            BUFFERED_IMAGE = 13;
+            FLOAT = 5,
+            DOUBLE = 6,
+            BOOLEAN_ARRAY = 7,
+            BYTE_ARRAY = 8,
+            CHAR_ARRAY = 9,
+            INT_ARRAY = 10,
+            LONG_ARRAY = 11,
+            FLOAT_ARRAY = 12,
+            DOUBLE_ARRAY = 13,
+            STRING = 14,
+            STRING_ARRAY = 15,
+            BYTE_BUFFER = 16,
+            BUFFERED_IMAGE = 17;
 
 }

@@ -100,7 +100,9 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.CHAR:
                     case FPNTConstants.INT:
-                    case FPNTConstants.LONG: {
+                    case FPNTConstants.LONG:
+                    case FPNTConstants.FLOAT:
+                    case FPNTConstants.DOUBLE: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
                             writeKey(output, entry.getKey());
                             output.write(FPNTParser.parse(entry.getValue()));
@@ -143,6 +145,22 @@ public class FPNTDecoder {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
                             writeKey(output, entry.getKey());
                             output.write(FPNTParser.parse(((long[])entry.getValue()).length));
+                            output.write(FPNTParser.parse(entry.getValue()));
+                        }
+                        break;
+                    }
+                    case FPNTConstants.FLOAT_ARRAY: {
+                        for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
+                            writeKey(output, entry.getKey());
+                            output.write(FPNTParser.parse(((float[])entry.getValue()).length));
+                            output.write(FPNTParser.parse(entry.getValue()));
+                        }
+                        break;
+                    }
+                    case FPNTConstants.DOUBLE_ARRAY: {
+                        for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
+                            writeKey(output, entry.getKey());
+                            output.write(FPNTParser.parse(((double[])entry.getValue()).length));
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
                         break;
@@ -300,6 +318,24 @@ public class FPNTDecoder {
                         }
                         break;
                     }
+                    case FPNTConstants.FLOAT:{
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            final byte[] bytes = new byte[4];
+                            input.read(bytes);
+                            container.putFloat(key, FPNTParser.parseFloat(bytes));
+                        }
+                        break;
+                    }
+                    case FPNTConstants.DOUBLE:{
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            final byte[] bytes = new byte[8];
+                            input.read(bytes);
+                            container.putDouble(key, FPNTParser.parseDouble(bytes));
+                        }
+                        break;
+                    }
                     case FPNTConstants.BOOLEAN_ARRAY:{
                         for (int i = 0; i < length; i++) {
                             final String key = readKey(input);
@@ -352,6 +388,28 @@ public class FPNTDecoder {
                             final byte[] bytes = new byte[size * 8];
                             input.read(bytes);
                             container.putLongArray(key, FPNTParser.parseLongArray(bytes));
+                        }
+                        break;
+                    }
+                    case FPNTConstants.FLOAT_ARRAY:{
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
+                            final byte[] bytes = new byte[size * 4];
+                            input.read(bytes);
+                            container.putFloatArray(key, FPNTParser.parseFloatArray(bytes));
+                        }
+                        break;
+                    }
+                    case FPNTConstants.DOUBLE_ARRAY:{
+                        for (int i = 0; i < length; i++) {
+                            final String key = readKey(input);
+                            input.read(count);
+                            final int size = FPNTParser.parseInt(count);
+                            final byte[] bytes = new byte[size * 8];
+                            input.read(bytes);
+                            container.putDoubleArray(key, FPNTParser.parseDoubleArray(bytes));
                         }
                         break;
                     }

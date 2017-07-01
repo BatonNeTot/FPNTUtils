@@ -9,11 +9,21 @@ import java.util.*;
 /**
  * @author KLLdon
  */
-public class FPNTContainer {
+public class FPNTContainer implements Cloneable{
 
     private final Map<Byte, Map<String, Object>> maps = new HashMap<>();
     private final List<FPNTExpander> expanderList = new ArrayList<>();
     private int version = 0;
+
+    @Override
+    public FPNTContainer clone() throws CloneNotSupportedException {
+        final FPNTContainer container = new FPNTContainer(new ArrayList<>(this.expanderList));
+        for (Map.Entry<Byte, Map<String, Object>> map : this.maps.entrySet()) {
+            final Map<String, Object> hash = new HashMap<>(map.getValue());
+            container.maps.put(map.getKey(), hash);
+        }
+        return container;
+    }
 
     /**
      * Get version
@@ -100,6 +110,10 @@ public class FPNTContainer {
             putInt(key, (int) value);
         } else if (value instanceof Long) {
             putLong(key, (long) value);
+        } else if (value instanceof Float) {
+            putFloat(key, (float) value);
+        } else if (value instanceof Double) {
+            putDouble(key, (double) value);
         } else if (value instanceof boolean[]) {
             putBooleanArray(key, (boolean[]) value);
         } else if (value instanceof byte[]) {
@@ -110,6 +124,10 @@ public class FPNTContainer {
             putIntArray(key, (int[]) value);
         } else if (value instanceof long[]) {
             putLongArray(key, (long[]) value);
+        } else if (value instanceof float[]) {
+            putFloatArray(key, (float[]) value);
+        } else if (value instanceof double[]) {
+            putDoubleArray(key, (double[]) value);
         } else if (value instanceof String) {
             putString(key, (String) value);
         } else if (value instanceof String[]) {
@@ -191,6 +209,26 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
+    public FPNTContainer putFloat(@NotNull final String key, @NotNull final float value) {
+        return putValue(FPNTConstants.FLOAT, key, value);
+    }
+
+    /**
+     * Put value in map by key
+     * @param key
+     * @param value
+     * @return this
+     */
+    public FPNTContainer putDouble(@NotNull final String key, @NotNull final double value) {
+        return putValue(FPNTConstants.DOUBLE, key, value);
+    }
+
+    /**
+     * Put value in map by key
+     * @param key
+     * @param value
+     * @return this
+     */
     public FPNTContainer putBooleanArray(@NotNull final String key, @NotNull final boolean[] value) {
         return putValue(FPNTConstants.BOOLEAN_ARRAY, key, value);
     }
@@ -233,6 +271,26 @@ public class FPNTContainer {
      */
     public FPNTContainer putLongArray(@NotNull final String key, @NotNull final long[] value) {
         return putValue(FPNTConstants.LONG_ARRAY, key, value);
+    }
+
+    /**
+     * Put value in map by key
+     * @param key
+     * @param value
+     * @return this
+     */
+    public FPNTContainer putFloatArray(@NotNull final String key, @NotNull final float[] value) {
+        return putValue(FPNTConstants.FLOAT_ARRAY, key, value);
+    }
+
+    /**
+     * Put value in map by key
+     * @param key
+     * @param value
+     * @return this
+     */
+    public FPNTContainer putDoubleArray(@NotNull final String key, @NotNull final double[] value) {
+        return putValue(FPNTConstants.DOUBLE_ARRAY, key, value);
     }
 
     /**
@@ -296,7 +354,8 @@ public class FPNTContainer {
      * @return value
      */
     public Object getValue(@NotNull final byte type, @NotNull final String key) {
-        return maps.get(type).get(key);
+        final Map<String, Object> map = maps.get(type);
+        return map == null ? null : map.get(key);
     }
 
     /**
@@ -412,8 +471,8 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public String[] getByteBuffer(@NotNull final String key) {
-        return (String[])getValue(FPNTConstants.BYTE_BUFFER, key);
+    public ByteBuffer getByteBuffer(@NotNull final String key) {
+        return (ByteBuffer)getValue(FPNTConstants.BYTE_BUFFER, key);
     }
 
     /**
@@ -421,8 +480,8 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public String[] getBufferedImage(@NotNull final String key) {
-        return (String[])getValue(FPNTConstants.BUFFERED_IMAGE, key);
+    public BufferedImage getBufferedImage(@NotNull final String key) {
+        return (BufferedImage)getValue(FPNTConstants.BUFFERED_IMAGE, key);
     }
 
     /**
