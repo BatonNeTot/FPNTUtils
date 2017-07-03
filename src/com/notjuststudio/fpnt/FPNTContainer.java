@@ -485,6 +485,159 @@ public class FPNTContainer implements Cloneable{
     }
 
     /**
+     * Remove and return first value from maps by key
+     * @param key
+     * @return value
+     */
+    public Object removeValue(@NotNull final String key) {
+        for (Map.Entry<Byte, Map<String, Object>> map : maps.entrySet()) {
+            final Object value = map.getValue().get(key);
+            if (value != null) {
+                map.getValue().remove(key);
+                return value;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Remove and return value by key
+     * @param type byte key
+     * @param key
+     * @return value
+     */
+    public Object removeValue(@NotNull final byte type, @NotNull final String key) {
+        final Map<String, Object> map = maps.get(type);
+        return map == null ? null : map.remove(key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public boolean removeBoolean(@NotNull final String key) {
+        return (boolean)removeValue(FPNTConstants.BOOLEAN, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public byte removeByte(@NotNull final String key) {
+        return (byte)removeValue(FPNTConstants.BYTE, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public char removeChar(@NotNull final String key) {
+        return (char)removeValue(FPNTConstants.CHAR, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public int removeInt(@NotNull final String key) {
+        return (int)removeValue(FPNTConstants.INT, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public long removeLong(@NotNull final String key) {
+        return (long)removeValue(FPNTConstants.LONG, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public boolean[] removeBooleanArray(@NotNull final String key) {
+        return (boolean[])removeValue(FPNTConstants.BOOLEAN_ARRAY, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public byte[] removeByteArray(@NotNull final String key) {
+        return (byte[])removeValue(FPNTConstants.BYTE_ARRAY, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public char[] removeCharArray(@NotNull final String key) {
+        return (char[])removeValue(FPNTConstants.CHAR_ARRAY, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public int[] removeIntArray(@NotNull final String key) {
+        return (int[])removeValue(FPNTConstants.INT_ARRAY, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public long[] removeLongArray(@NotNull final String key) {
+        return (long[])removeValue(FPNTConstants.LONG_ARRAY, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public String removeString(@NotNull final String key) {
+        return (String)removeValue(FPNTConstants.STRING, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public String[] removeStringArray(@NotNull final String key) {
+        return (String[])removeValue(FPNTConstants.STRING_ARRAY, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public ByteBuffer removeByteBuffer(@NotNull final String key) {
+        return (ByteBuffer)removeValue(FPNTConstants.BYTE_BUFFER, key);
+    }
+
+    /**
+     * Remove and return value by key
+     * @param key
+     * @return value
+     */
+    public BufferedImage removeBufferedImage(@NotNull final String key) {
+        return (BufferedImage)removeValue(FPNTConstants.BUFFERED_IMAGE, key);
+    }
+
+    /**
      * Get available types
      * @return
      */
