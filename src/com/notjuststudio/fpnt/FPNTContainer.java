@@ -485,6 +485,173 @@ public class FPNTContainer implements Cloneable{
     }
 
     /**
+     * Get first value from maps by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public Object getValue(@NotNull final String key, final Object value) {
+        for (Map.Entry<Byte, Map<String, Object>> map : maps.entrySet()) {
+            final Object tmp = map.getValue().get(key);
+            if (tmp != null)
+                return tmp;
+        }
+        return value;
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param type byte key
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public Object getValue(@NotNull final byte type, @NotNull final String key, final Object value) {
+        final Map<String, Object> map = maps.get(type);
+        return map == null ? value : map.get(key);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public boolean getBoolean(@NotNull final String key, final boolean value) {
+        return (boolean)getValue(FPNTConstants.BOOLEAN, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public byte getByte(@NotNull final String key, final byte value) {
+        return (byte)getValue(FPNTConstants.BYTE, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public char getChar(@NotNull final String key, final char value) {
+        return (char)getValue(FPNTConstants.CHAR, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public int getInt(@NotNull final String key, final int value) {
+        return (int)getValue(FPNTConstants.INT, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public long getLong(@NotNull final String key, final long value) {
+        return (long)getValue(FPNTConstants.LONG, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public boolean[] getBooleanArray(@NotNull final String key, final boolean[] value) {
+        return (boolean[])getValue(FPNTConstants.BOOLEAN_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public byte[] getByteArray(@NotNull final String key, final byte[] value) {
+        return (byte[])getValue(FPNTConstants.BYTE_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public char[] getCharArray(@NotNull final String key, final char[] value) {
+        return (char[])getValue(FPNTConstants.CHAR_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public int[] getIntArray(@NotNull final String key, final int[] value) {
+        return (int[])getValue(FPNTConstants.INT_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public long[] getLongArray(@NotNull final String key, final long[] value) {
+        return (long[])getValue(FPNTConstants.LONG_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public String getString(@NotNull final String key, final String value) {
+        return (String)getValue(FPNTConstants.STRING, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public String[] getStringArray(@NotNull final String key, final String[] value) {
+        return (String[])getValue(FPNTConstants.STRING_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public ByteBuffer getByteBuffer(@NotNull final String key, final ByteBuffer value) {
+        return (ByteBuffer)getValue(FPNTConstants.BYTE_BUFFER, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public BufferedImage getBufferedImage(@NotNull final String key, final BufferedImage value) {
+        return (BufferedImage)getValue(FPNTConstants.BUFFERED_IMAGE, key, value);
+    }
+
+    /**
      * Remove and return first value from maps by key
      * @param key
      * @return value
