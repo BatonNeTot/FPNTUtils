@@ -235,9 +235,7 @@ public class FPNTDecoder {
      * @throws IOException can be thrown by outputStream.write()
      */
     public static void writeInt(@NotNull final OutputStream output,@NotNull  final int value) throws IOException {
-        final byte[] bytes = FPNTParser.parse(value);
-        output.write(FPNTParser.parse(bytes.length));
-        output.write(bytes);
+        output.write(FPNTParser.parse(value));
     }
 
     /**
