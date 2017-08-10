@@ -229,6 +229,18 @@ public class FPNTDecoder {
     }
 
     /**
+     * Write int value in already opened outputStream
+     * @param output opened outputStream
+     * @param value
+     * @throws IOException can be thrown by outputStream.write()
+     */
+    public static void writeInt(@NotNull final OutputStream output,@NotNull  final int value) throws IOException {
+        final byte[] bytes = FPNTParser.parse(value);
+        output.write(FPNTParser.parse(bytes.length));
+        output.write(bytes);
+    }
+
+    /**
      * @see #read(File, FPNTContainer)
      */
     public static FPNTContainer read(@NotNull final File file) {
@@ -484,6 +496,18 @@ public class FPNTDecoder {
         final byte[] key = new byte[length];
         input.read(key);
         return FPNTParser.parseString(key);
+    }
+
+    /**
+     * Read int value from already opened inputStream
+     * @param input opened inputStream
+     * @return int value
+     * @throws IOException can be thrown by outputStream.write()
+     */
+    public static int readInt(@NotNull final InputStream input) throws IOException {
+        final byte[] size = new byte[4];
+        input.read(size);
+        return FPNTParser.parseInt(size);
     }
 
 }
