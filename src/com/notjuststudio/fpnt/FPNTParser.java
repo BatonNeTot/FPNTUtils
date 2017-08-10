@@ -311,9 +311,10 @@ public class FPNTParser {
     }
 
     public static byte[] parse(@NotNull final ByteBuffer buffer) {
-        byte[] buffered = new byte[buffer.remaining()];
+        final byte[] buffered = new byte[buffer.remaining()];
+        final int position = buffer.position();
         buffer.get(buffered);
-        buffer.position(0);
+        buffer.position(position);
         return  buffered;
     }
 
