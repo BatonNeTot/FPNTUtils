@@ -508,7 +508,10 @@ public class FPNTContainer implements Cloneable{
      */
     public Object getValue(@NotNull final byte type, @NotNull final String key, final Object value) {
         final Map<String, Object> map = maps.get(type);
-        return map == null ? value : map.get(key);
+        if (map == null)
+            return value;
+        final Object tmp = map.get(key);
+        return tmp == null ? value : tmp;
     }
 
     /**

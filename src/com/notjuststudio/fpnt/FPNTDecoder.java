@@ -241,7 +241,7 @@ public class FPNTDecoder {
      * @param container target FPNTContainer
      * @return container
      */
-    public static FPNTContainer read(@NotNull final File file, @NotNull final FPNTContainer container) {
+    public static <T extends FPNTContainer> T read(@NotNull final File file, @NotNull final T container) {
         final BufferedInputStream input;
         try {
             input = new BufferedInputStream(new FileInputStream(file));
