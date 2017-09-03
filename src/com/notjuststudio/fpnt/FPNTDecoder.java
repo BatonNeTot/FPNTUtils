@@ -87,13 +87,13 @@ public class FPNTDecoder {
                         }
 
                         for (String key : keys)
-                            writeKey(output, key);
+                            writeString(output, key);
                         output.write(FPNTParser.parse(values));
                         break;
                     }
                     case FPNTConstants.BYTE: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write((byte)entry.getValue());
                         }
                         break;
@@ -104,14 +104,14 @@ public class FPNTDecoder {
                     case FPNTConstants.FLOAT:
                     case FPNTConstants.DOUBLE: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
                         break;
                     }
                     case FPNTConstants.BOOLEAN_ARRAY:{
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(((boolean[])entry.getValue()).length));
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
@@ -119,7 +119,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BYTE_ARRAY: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(((byte[])entry.getValue()).length));
                             output.write((byte[])entry.getValue());
                         }
@@ -127,7 +127,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.CHAR_ARRAY:{
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(((char[])entry.getValue()).length));
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
@@ -135,7 +135,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.INT_ARRAY:{
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(((int[])entry.getValue()).length));
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
@@ -143,7 +143,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.LONG_ARRAY: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(((long[])entry.getValue()).length));
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
@@ -151,7 +151,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.FLOAT_ARRAY: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(((float[])entry.getValue()).length));
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
@@ -159,7 +159,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.DOUBLE_ARRAY: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             output.write(FPNTParser.parse(((double[])entry.getValue()).length));
                             output.write(FPNTParser.parse(entry.getValue()));
                         }
@@ -167,14 +167,14 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.STRING: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
-                            writeKey(output, (String)entry.getValue());
+                            writeString(output, entry.getKey());
+                            writeString(output, (String)entry.getValue());
                         }
                         break;
                     }
                     case FPNTConstants.STRING_ARRAY: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             final byte[] strings = FPNTParser.parse(entry.getValue());
                             output.write(FPNTParser.parse(strings.length));
                             output.write(strings);
@@ -183,7 +183,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BYTE_BUFFER: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             final byte[] bytes = FPNTParser.parse(entry.getValue());
                             output.write(FPNTParser.parse(bytes.length));
                             output.write(bytes);
@@ -192,7 +192,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BUFFERED_IMAGE: {
                         for (Map.Entry<String, Object> entry : map.getValue().entrySet()) {
-                            writeKey(output, entry.getKey());
+                            writeString(output, entry.getKey());
                             final byte[] bytes = FPNTParser.parse(entry.getValue());
                             output.write(FPNTParser.parse(bytes.length));
                             output.write(bytes);
@@ -217,13 +217,13 @@ public class FPNTDecoder {
     }
 
     /**
-     * Write String key in already opened outputStream
+     * Write String value in already opened outputStream
      * @param output opened outputStream
-     * @param key
+     * @param value
      * @throws IOException can be thrown by outputStream.write()
      */
-    public static void writeKey(@NotNull final OutputStream output,@NotNull  final String key) throws IOException {
-        final byte[] bytes = FPNTParser.parse(key);
+    public static void writeString(@NotNull final OutputStream output, @NotNull  final String value) throws IOException {
+        final byte[] bytes = FPNTParser.parse(value);
         output.write(FPNTParser.parse(bytes.length));
         output.write(bytes);
     }
@@ -284,7 +284,7 @@ public class FPNTDecoder {
                     case FPNTConstants.BOOLEAN:{
                         final String[] keys = new String[length];
                         for (int i = 0; i < length; i++) {
-                            keys[i] = readKey(input);
+                            keys[i] = readString(input);
                         }
                         final byte[] bytes = new byte[length / 8 + ((length % 8) > 0 ? 1 : 0)];
                         input.read(bytes);
@@ -296,14 +296,14 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BYTE:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             container.putByte(key, (byte)input.read());
                         }
                         break;
                     }
                     case FPNTConstants.CHAR:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             final byte[] bytes = new byte[2];
                             input.read(bytes);
                             container.putChar(key, FPNTParser.parseChar(bytes));
@@ -312,7 +312,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.INT:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             final byte[] bytes = new byte[4];
                             input.read(bytes);
                             container.putInt(key, FPNTParser.parseInt(bytes));
@@ -321,7 +321,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.LONG:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             final byte[] bytes = new byte[8];
                             input.read(bytes);
                             container.putLong(key, FPNTParser.parseLong(bytes));
@@ -330,7 +330,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.FLOAT:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             final byte[] bytes = new byte[4];
                             input.read(bytes);
                             container.putFloat(key, FPNTParser.parseFloat(bytes));
@@ -339,7 +339,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.DOUBLE:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             final byte[] bytes = new byte[8];
                             input.read(bytes);
                             container.putDouble(key, FPNTParser.parseDouble(bytes));
@@ -348,7 +348,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BOOLEAN_ARRAY:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size / 8 + ((size % 8) > 0 ? 1 : 0)];
@@ -359,7 +359,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BYTE_ARRAY:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
@@ -370,7 +370,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.CHAR_ARRAY:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 2];
@@ -381,7 +381,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.INT_ARRAY:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 4];
@@ -392,7 +392,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.LONG_ARRAY:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 8];
@@ -403,7 +403,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.FLOAT_ARRAY:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 4];
@@ -414,7 +414,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.DOUBLE_ARRAY:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 8];
@@ -425,15 +425,15 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.STRING: {
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
-                            final String value = readKey(input);
+                            final String key = readString(input);
+                            final String value = readString(input);
                             container.putString(key, value);
                         }
                         break;
                     }
                     case FPNTConstants.STRING_ARRAY: {
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
@@ -444,7 +444,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BYTE_BUFFER:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
@@ -455,7 +455,7 @@ public class FPNTDecoder {
                     }
                     case FPNTConstants.BUFFERED_IMAGE:{
                         for (int i = 0; i < length; i++) {
-                            final String key = readKey(input);
+                            final String key = readString(input);
                             input.read(count);
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
@@ -481,19 +481,19 @@ public class FPNTDecoder {
     }
 
     /**
-     * Read String key from already opened inputStream
+     * Read String value from already opened inputStream
      * @param input opened inputStream
-     * @return String key
+     * @return String value
      * @throws IOException can be thrown by outputStream.write()
      */
-    public static String readKey(@NotNull final InputStream input) throws IOException {
+    public static String readString(@NotNull final InputStream input) throws IOException {
         final byte[] size = new byte[4];
         input.read(size);
         final int length = FPNTParser.parseInt(size);
 
-        final byte[] key = new byte[length];
-        input.read(key);
-        return FPNTParser.parseString(key);
+        final byte[] value = new byte[length];
+        input.read(value);
+        return FPNTParser.parseString(value);
     }
 
     /**
