@@ -606,6 +606,26 @@ public class FPNTContainer implements Cloneable{
      * @param value default
      * @return value
      */
+    public float getFloat(@NotNull final String key, final float value) {
+        return (float)getValue(FPNTConstants.FLOAT, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public double getDouble(@NotNull final String key, final double value) {
+        return (double)getValue(FPNTConstants.DOUBLE, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
     public boolean[] getBooleanArray(@NotNull final String key, final boolean[] value) {
         return (boolean[])getValue(FPNTConstants.BOOLEAN_ARRAY, key, value);
     }
@@ -648,6 +668,26 @@ public class FPNTContainer implements Cloneable{
      */
     public long[] getLongArray(@NotNull final String key, final long[] value) {
         return (long[])getValue(FPNTConstants.LONG_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public float[] getFloatArray(@NotNull final String key, final float[] value) {
+        return (float[])getValue(FPNTConstants.FLOAT_ARRAY, key, value);
+    }
+
+    /**
+     * Get value by key or return default value
+     * @param key
+     * @param value default
+     * @return value
+     */
+    public double[] getDoubleArray(@NotNull final String key, final double[] value) {
+        return (double[])getValue(FPNTConstants.DOUBLE_ARRAY, key, value);
     }
 
     /**
