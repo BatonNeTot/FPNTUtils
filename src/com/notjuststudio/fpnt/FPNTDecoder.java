@@ -1,6 +1,7 @@
 package com.notjuststudio.fpnt;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -41,31 +42,12 @@ public class FPNTDecoder {
     }
 
     /**
-     * @see #write(File, FPNTContainer, boolean)
-     */
-    public static void write(@NotNull final File file,@NotNull  final FPNTContainer container) {
-        write(file, container, false);
-    }
-
-    /**
-     * Write FPNTContainer to file
-     * @param file target file
+     * Encode FPNTContainer to outputStream
+     * @param output target stream
      * @param container source FPNTContainer
-     * @param canBeOverwritten will be file overwritten, if already exist
      */
-    public static void write(@NotNull final File file,@NotNull  final FPNTContainer container,@NotNull  final boolean canBeOverwritten) {
-        if (!canBeOverwritten && file.exists())
-            throw new FPNTException("File already exists");
-        final BufferedOutputStream output;
+    public static void encode(@NotNull final OutputStream output, @NotNull final FPNTContainer container) {
         try {
-            output = new BufferedOutputStream(new FileOutputStream(file));
-        } catch (FileNotFoundException e) {
-            throw new FPNTException(e);
-        }
-        try {
-            output.write(FPNTConstants.MAGIC_NUMBER_ARRAY);
-            output.write(FPNTParser.parse(container.getVersion()));
-
             maps:
             for (Map.Entry<Byte, Map<String, Object>> map : container.getMaps().entrySet()) {
                 output.write(map.getKey());
@@ -207,12 +189,41 @@ public class FPNTDecoder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        finally {
-            try {
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    }
+
+    /**
+     * @see #write(File, FPNTContainer, boolean)
+     */
+    public static void write(@NotNull final File file,@NotNull  final FPNTContainer container) {
+        write(file, container, false);
+    }
+
+    /**
+     * Write FPNTContainer to file
+     * @param file target file
+     * @param container source FPNTContainer
+     * @param canBeOverwritten will be file overwritten, if already exist
+     */
+    public static void write(@NotNull final File file,@NotNull  final FPNTContainer container,@NotNull  final boolean canBeOverwritten) {
+        if (!canBeOverwritten && file.exists())
+            throw new FPNTException("File already exists");
+        final BufferedOutputStream output;
+        try {
+            output = new BufferedOutputStream(new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new FPNTException(e);
+        }
+        try {
+            output.write(FPNTConstants.MAGIC_NUMBER_ARRAY);
+            output.write(FPNTParser.parse(container.getVersion()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        encode(output, container);
+        try {
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -239,35 +250,12 @@ public class FPNTDecoder {
     }
 
     /**
-     * @see #read(File, FPNTContainer)
-     */
-    public static FPNTContainer read(@NotNull final File file) {
-        return read(file, new FPNTContainer());
-    }
-
-    /**
-     * Read file to FPNTContainer
-     * @param file
+     * Decode FPNTContainer from inputStream
+     * @param input source stream
      * @param container target FPNTContainer
-     * @return container
      */
-    public static <T extends FPNTContainer> T read(@NotNull final File file, @NotNull final T container) {
-        final BufferedInputStream input;
+    public static void decode(@NotNull final InputStream input, @NotNull final FPNTContainer container) {
         try {
-            input = new BufferedInputStream(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            throw new FPNTException(e);
-        }
-        try {
-            final byte[] data = new byte[2];
-            input.read(data);
-            char check = FPNTParser.parseChar(data);
-            if (check != FPNTConstants.MAGIC_NUMBER) {
-                throw new FPNTException("File is not FPNT type");
-            }
-            final byte[] version = new byte[4];
-            input.read(version);
-            container.setVersion(FPNTParser.parseInt(version));
             byte type;
             maps:
             while((type = (byte)input.read()) != -1) {
@@ -470,12 +458,47 @@ public class FPNTDecoder {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                input.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        }
+    }
+
+    /**
+     * @see #read(File, FPNTContainer)
+     */
+    public static FPNTContainer read(@NotNull final File file) {
+        return read(file, new FPNTContainer());
+    }
+
+    /**
+     * Read file to FPNTContainer
+     * @param file
+     * @param container target FPNTContainer
+     * @return container
+     */
+    public static <T extends FPNTContainer> T read(@NotNull final File file, @NotNull final T container) {
+        final BufferedInputStream input;
+        try {
+            input = new BufferedInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new FPNTException(e);
+        }
+        try {
+            final byte[] data = new byte[2];
+            input.read(data);
+            char check = FPNTParser.parseChar(data);
+            if (check != FPNTConstants.MAGIC_NUMBER) {
+                throw new FPNTException("File is not FPNT type");
             }
+            final byte[] version = new byte[4];
+            input.read(version);
+            container.setVersion(FPNTParser.parseInt(version));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        decode(input, container);
+        try {
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return container;
     }
