@@ -1,7 +1,6 @@
 package com.notjuststudio.fpnt;
 
 import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class FPNTDecoder {
             for (Map.Entry<Byte, Map<String, Object>> map : container.getMaps().entrySet()) {
                 output.write(map.getKey());
 
-                for (FPNTExpander expander : container.getExpanderList()) {
+                for (FPNTExpander expander : container.getExpanderSet()) {
                     if (expander.write(output, map.getKey(), container.getTypeMap(map.getKey())))
                         continue maps;
                 }
@@ -262,7 +261,7 @@ public class FPNTDecoder {
             while((type = (byte)input.read()) != -1) {
                 final byte[] count = new byte[4];
 
-                for (FPNTExpander expander : container.getExpanderList()) {
+                for (FPNTExpander expander : container.getExpanderSet()) {
                     if (expander.read(input, type, container))
                         continue maps;
                 }

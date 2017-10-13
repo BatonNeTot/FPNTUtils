@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FPNTContainer {
 
     private final Map<Byte, Map<String, Object>> maps = new ConcurrentHashMap<>();
-    private final Set<FPNTExpander> expanderList = new ConcurrentHashSet<>();
+    private final Set<FPNTExpander> expanderSet = new ConcurrentHashSet<>();
     private int version = 0;
 
     /**
@@ -54,18 +54,18 @@ public class FPNTContainer {
 
     /**
      * Constructor with custom ExpanderList
-     * @param expanderList
+     * @param expanderSet
      */
-    public FPNTContainer(@NotNull final Set<FPNTExpander> expanderList) {
-        this.expanderList.addAll(expanderList);
+    public FPNTContainer(@NotNull final Set<FPNTExpander> expanderSet) {
+        this.expanderSet.addAll(expanderSet);
     }
 
     /**
      * Get ExpanderList
      * @return
      */
-    public Set<FPNTExpander> getExpanderList() {
-        return new HashSet<>(expanderList);
+    public Set<FPNTExpander> getExpanderSet() {
+        return new HashSet<>(expanderSet);
     }
 
     /**
@@ -73,7 +73,7 @@ public class FPNTContainer {
      * @param expander
      */
     public void addExpander(@NotNull final FPNTExpander expander) {
-        this.expanderList.add(expander);
+        this.expanderSet.add(expander);
     }
 
     /**
@@ -81,14 +81,14 @@ public class FPNTContainer {
      * @param expander
      */
     public void removeExpander(@NotNull final FPNTExpander expander) {
-        this.expanderList.remove(expander);
+        this.expanderSet.remove(expander);
     }
 
     /**
      * Remove all Expander
      */
     public void clearExpanderList() {
-        expanderList.clear();
+        expanderSet.clear();
     }
 
     /**
