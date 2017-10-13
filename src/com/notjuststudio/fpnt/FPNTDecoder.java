@@ -51,12 +51,13 @@ public class FPNTDecoder {
             maps:
             for (Map.Entry<Byte, Map<String, Object>> map : container.getMaps().entrySet()) {
                 output.write(map.getKey());
-                output.write(FPNTParser.parse(map.getValue().size()));
 
                 for (FPNTExpander expander : container.getExpanderList()) {
                     if (expander.write(output, map.getKey(), container.getTypeMap(map.getKey())))
                         continue maps;
                 }
+
+                output.write(FPNTParser.parse(map.getValue().size()));
 
                 switch (map.getKey()) {
                     case FPNTConstants.BOOLEAN: {
@@ -260,13 +261,14 @@ public class FPNTDecoder {
             maps:
             while((type = (byte)input.read()) != -1) {
                 final byte[] count = new byte[4];
-                input.read(count);
-                final int length = FPNTParser.parseInt(count);
 
                 for (FPNTExpander expander : container.getExpanderList()) {
                     if (expander.read(input, type, container))
                         continue maps;
                 }
+
+                input.read(count);
+                final int length = FPNTParser.parseInt(count);
 
                 switch (type) {
                     case FPNTConstants.BOOLEAN:{
