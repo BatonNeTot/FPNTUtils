@@ -178,7 +178,7 @@ public class FPNTParser {
     }
 
     public static byte[] parse(@NotNull final String value) {
-        return value.getBytes(StandardCharsets.UTF_8);
+        return value.getBytes();
     }
 
     public static byte[] parse(@NotNull final String[] value) {
@@ -286,7 +286,7 @@ public class FPNTParser {
     }
 
     public static String parseString(@NotNull final byte[] source) {
-        return new String(source, StandardCharsets.UTF_8);
+        return new String(source);
     }
 
     public static String[] parseStringArray(@NotNull final byte[] source) {
