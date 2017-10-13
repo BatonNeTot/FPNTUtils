@@ -1,4 +1,4 @@
-package com.notjuststudio.util;
+package com.notjuststudio.thread;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

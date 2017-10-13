@@ -1,10 +1,8 @@
 package com.notjuststudio.fpnt;
 
-import com.notjuststudio.util.ConcurrentHashSet;
+import com.notjuststudio.thread.ConcurrentHashSet;
 import com.sun.istack.internal.NotNull;
 
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,7 +56,7 @@ public class FPNTContainer {
      * Constructor with custom ExpanderList
      * @param expanderList
      */
-    public FPNTContainer(@NotNull final List<FPNTExpander> expanderList) {
+    public FPNTContainer(@NotNull final Set<FPNTExpander> expanderList) {
         this.expanderList.addAll(expanderList);
     }
 
