@@ -457,7 +457,7 @@ public class FPNTDecoder {
                         throw new FPNTException("Can't read file, unknown type " + Byte.toString(type));
                 }
             }
-        } catch (IOException | IndexOutOfBoundsException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
