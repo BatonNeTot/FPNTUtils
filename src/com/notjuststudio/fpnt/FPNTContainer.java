@@ -1,29 +1,21 @@
 package com.notjuststudio.fpnt;
 
+import com.notjuststudio.util.ConcurrentHashSet;
 import com.sun.istack.internal.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author KLLdon
  */
-public class FPNTContainer implements Cloneable{
+public class FPNTContainer {
 
-    private final Map<Byte, Map<String, Object>> maps = new HashMap<>();
-    private final List<FPNTExpander> expanderList = new ArrayList<>();
+    private final Map<Byte, Map<String, Object>> maps = new ConcurrentHashMap<>();
+    private final Set<FPNTExpander> expanderList = new ConcurrentHashSet<>();
     private int version = 0;
-
-    @Override
-    public FPNTContainer clone() throws CloneNotSupportedException {
-        final FPNTContainer container = new FPNTContainer(new ArrayList<>(this.expanderList));
-        for (Map.Entry<Byte, Map<String, Object>> map : this.maps.entrySet()) {
-            final Map<String, Object> hash = new HashMap<>(map.getValue());
-            container.maps.put(map.getKey(), hash);
-        }
-        return container;
-    }
 
     /**
      * Get version
@@ -84,6 +76,14 @@ public class FPNTContainer implements Cloneable{
      */
     public void addExpander(@NotNull final FPNTExpander expander) {
         this.expanderList.add(expander);
+    }
+
+    /**
+     * Remove custom Expander
+     * @param expander
+     */
+    public void removeExpander(@NotNull final FPNTExpander expander) {
+        this.expanderList.remove(expander);
     }
 
     /**
