@@ -1,6 +1,6 @@
 package com.notjuststudio.fpnt;
 
-import com.notjuststudio.thread.ConcurrentHashSet;
+import com.notjuststudio.threadsauce.ConcurrentHashSet;
 import com.sun.istack.internal.NotNull;
 
 import java.util.*;
@@ -29,14 +29,6 @@ public class FPNTContainer {
      */
     public void setVersion(int version) {
         this.version = version;
-    }
-
-    /**
-     * Get map of maps
-     * @return
-     */
-    public Map<Byte, Map<String, Object>> getMaps() {
-        return new HashMap<>(maps);
     }
 
     /**
@@ -98,7 +90,7 @@ public class FPNTContainer {
      * @param value
      * @return this
      */
-    public FPNTContainer putValue(@NotNull final byte type, @NotNull final String key, @NotNull final Object value) {
+    public FPNTContainer put(@NotNull final byte type, @NotNull final String key, @NotNull final Object value) {
         maps.computeIfAbsent(type, k -> new ConcurrentHashMap<>());
         maps.get(type).put(key, value);
         return this;
@@ -110,7 +102,7 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public Object getValue(@NotNull final byte type, @NotNull final String key) {
+    public Object get(@NotNull final byte type, @NotNull final String key) {
         final Map<String, Object> map = maps.get(type);
         return map == null ? null : map.get(key);
     }
@@ -122,7 +114,7 @@ public class FPNTContainer {
      * @param value default
      * @return value
      */
-    public Object getValue(@NotNull final byte type, @NotNull final String key, final Object value) {
+    public Object getOrDefault(@NotNull final byte type, @NotNull final String key, final Object value) {
         final Map<String, Object> map = maps.get(type);
         if (map == null)
             return value;
@@ -136,9 +128,17 @@ public class FPNTContainer {
      * @param key
      * @return value
      */
-    public Object removeValue(@NotNull final byte type, @NotNull final String key) {
+    public Object remove(@NotNull final byte type, @NotNull final String key) {
         final Map<String, Object> map = maps.get(type);
         return map == null ? null : map.remove(key);
+    }
+
+    /**
+     * Get map of maps
+     * @return
+     */
+    public Map<Byte, Map<String, Object>> getMaps() {
+        return maps;
     }
 
     /**
@@ -155,11 +155,8 @@ public class FPNTContainer {
      * @return
      */
     public Map<String, Object> getTypeMap(@NotNull final byte type) {
-        final Map<String, Object> map = maps.get(maps);
-        final Map<String, Object> result = new HashMap<>();
-        if (map != null)
-            result.putAll(map);
-        return result;
+        maps.computeIfAbsent(type, k -> new ConcurrentHashMap<>());
+        return maps.get(type);
     }
 
     /**
@@ -168,11 +165,7 @@ public class FPNTContainer {
      * @return
      */
     public Set<String> getTypeKeys(@NotNull final byte type) {
-        final Map<String, Object> map = maps.get(maps);
-        final Set<String> keys = new HashSet<>();
-        if (map != null)
-            keys.addAll(map.keySet());
-        return keys;
+        return getTypeMap(type).keySet();
     }
 
     @Override

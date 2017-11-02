@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="ImageUtils" level="project" />
+    <orderEntry type="library" name="ThreadSauce" level="project" />
   </component>
 </module>

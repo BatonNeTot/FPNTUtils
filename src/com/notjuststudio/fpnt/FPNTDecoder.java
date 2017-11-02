@@ -279,14 +279,14 @@ public class FPNTDecoder {
                         input.read(bytes);
                         final boolean[] value = FPNTParser.parseBooleanArray(bytes, length);
                         for (int i = 0; i < length; i++) {
-                            container.putValue(FPNTConstants.BOOLEAN, keys[i], value[i]);
+                            container.put(FPNTConstants.BOOLEAN, keys[i], value[i]);
                         }
                         break;
                     }
                     case FPNTConstants.BYTE:{
                         for (int i = 0; i < length; i++) {
                             final String key = readString(input);
-                            container.putValue(FPNTConstants.BYTE, key, (byte)input.read());
+                            container.put(FPNTConstants.BYTE, key, (byte)input.read());
                         }
                         break;
                     }
@@ -295,7 +295,7 @@ public class FPNTDecoder {
                             final String key = readString(input);
                             final byte[] bytes = new byte[2];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.CHAR, key, FPNTParser.parseChar(bytes));
+                            container.put(FPNTConstants.CHAR, key, FPNTParser.parseChar(bytes));
                         }
                         break;
                     }
@@ -304,7 +304,7 @@ public class FPNTDecoder {
                             final String key = readString(input);
                             final byte[] bytes = new byte[4];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.INT, key, FPNTParser.parseInt(bytes));
+                            container.put(FPNTConstants.INT, key, FPNTParser.parseInt(bytes));
                         }
                         break;
                     }
@@ -313,7 +313,7 @@ public class FPNTDecoder {
                             final String key = readString(input);
                             final byte[] bytes = new byte[8];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.LONG, key, FPNTParser.parseLong(bytes));
+                            container.put(FPNTConstants.LONG, key, FPNTParser.parseLong(bytes));
                         }
                         break;
                     }
@@ -322,7 +322,7 @@ public class FPNTDecoder {
                             final String key = readString(input);
                             final byte[] bytes = new byte[4];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.FLOAT, key, FPNTParser.parseFloat(bytes));
+                            container.put(FPNTConstants.FLOAT, key, FPNTParser.parseFloat(bytes));
                         }
                         break;
                     }
@@ -331,7 +331,7 @@ public class FPNTDecoder {
                             final String key = readString(input);
                             final byte[] bytes = new byte[8];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.DOUBLE, key, FPNTParser.parseDouble(bytes));
+                            container.put(FPNTConstants.DOUBLE, key, FPNTParser.parseDouble(bytes));
                         }
                         break;
                     }
@@ -342,7 +342,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size / 8 + ((size % 8) > 0 ? 1 : 0)];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.BOOLEAN_ARRAY, key, FPNTParser.parseBooleanArray(bytes, size));
+                            container.put(FPNTConstants.BOOLEAN_ARRAY, key, FPNTParser.parseBooleanArray(bytes, size));
                         }
                         break;
                     }
@@ -353,7 +353,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.BYTE_ARRAY, key, bytes);
+                            container.put(FPNTConstants.BYTE_ARRAY, key, bytes);
                         }
                         break;
                     }
@@ -364,7 +364,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 2];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.CHAR_ARRAY, key, FPNTParser.parseCharArray(bytes));
+                            container.put(FPNTConstants.CHAR_ARRAY, key, FPNTParser.parseCharArray(bytes));
                         }
                         break;
                     }
@@ -375,7 +375,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 4];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.INT_ARRAY, key, FPNTParser.parseIntArray(bytes));
+                            container.put(FPNTConstants.INT_ARRAY, key, FPNTParser.parseIntArray(bytes));
                         }
                         break;
                     }
@@ -386,7 +386,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 8];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.LONG_ARRAY, key, FPNTParser.parseLongArray(bytes));
+                            container.put(FPNTConstants.LONG_ARRAY, key, FPNTParser.parseLongArray(bytes));
                         }
                         break;
                     }
@@ -397,7 +397,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 4];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.FLOAT_ARRAY, key, FPNTParser.parseFloatArray(bytes));
+                            container.put(FPNTConstants.FLOAT_ARRAY, key, FPNTParser.parseFloatArray(bytes));
                         }
                         break;
                     }
@@ -408,7 +408,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size * 8];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.DOUBLE_ARRAY, key, FPNTParser.parseDoubleArray(bytes));
+                            container.put(FPNTConstants.DOUBLE_ARRAY, key, FPNTParser.parseDoubleArray(bytes));
                         }
                         break;
                     }
@@ -416,7 +416,7 @@ public class FPNTDecoder {
                         for (int i = 0; i < length; i++) {
                             final String key = readString(input);
                             final String value = readString(input);
-                            container.putValue(FPNTConstants.STRING, key, value);
+                            container.put(FPNTConstants.STRING, key, value);
                         }
                         break;
                     }
@@ -427,7 +427,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.STRING_ARRAY, key, FPNTParser.parseStringArray(bytes));
+                            container.put(FPNTConstants.STRING_ARRAY, key, FPNTParser.parseStringArray(bytes));
                         }
                         break;
                     }
@@ -438,7 +438,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.BYTE_BUFFER, key, FPNTParser.parseByteBuffer(bytes));
+                            container.put(FPNTConstants.BYTE_BUFFER, key, FPNTParser.parseByteBuffer(bytes));
                         }
                         break;
                     }
@@ -449,7 +449,7 @@ public class FPNTDecoder {
                             final int size = FPNTParser.parseInt(count);
                             final byte[] bytes = new byte[size];
                             input.read(bytes);
-                            container.putValue(FPNTConstants.BUFFERED_IMAGE, key, FPNTParser.parseBufferedImage(bytes));
+                            container.put(FPNTConstants.BUFFERED_IMAGE, key, FPNTParser.parseBufferedImage(bytes));
                         }
                         break;
                     }
