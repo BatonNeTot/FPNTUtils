@@ -24,6 +24,16 @@ public interface FPNTExpander {
     boolean write(@NotNull final OutputStream output, @NotNull  final byte type, @NotNull final Map<String, Object> map) throws IOException;
 
     /**
+     * Custom one write for FPNTDecoder
+     * @param output already opened outputStream
+     * @param type byte key for value
+     * @param value
+     * @return can current type be handle by method
+     * @throws IOException can be thrown by outputStream
+     */
+    boolean write(@NotNull final OutputStream output, @NotNull final byte type, @NotNull final Object value) throws IOException;
+
+    /**
      * Custom read for FPNTDecoder
      * @param input already opened inputStream
      * @param type byte key for value
@@ -31,6 +41,16 @@ public interface FPNTExpander {
      * @return can current type be handle by method
      * @throws IOException can be thrown by inputStream
      */
-    boolean read(@NotNull final InputStream input,@NotNull  final byte type,@NotNull  final FPNTContainer container) throws IOException;
+    boolean read(@NotNull final InputStream input, @NotNull  final byte type, @NotNull  final FPNTContainer container) throws IOException;
+
+    /**
+     * Custom one read for FPNTDecoder
+     * @param input already opened inputStream
+     * @param type byte key for value
+     * @param value FPNTContainer
+     * @return can current type be handle by method
+     * @throws IOException can be thrown by inputStream
+     */
+    boolean read(@NotNull final InputStream input, @NotNull  final byte type, @NotNull  final Object value) throws IOException;
 
 }
