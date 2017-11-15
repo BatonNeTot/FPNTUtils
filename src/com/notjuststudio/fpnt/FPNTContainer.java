@@ -163,6 +163,20 @@ public class FPNTContainer {
     }
 
     /**
+     * Return true, if contains value of type in key
+     * @param type byte key of value
+     * @param key
+     * @return
+     */
+    public boolean contains(@NotNull final byte type, @NotNull final String key) {
+        if (maps.containsKey(type)) {
+            return  maps.get(type).containsKey(key);
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Remove and return value by key
      * @param type byte key
      * @param key
