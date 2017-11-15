@@ -123,6 +123,9 @@ public class FPNTContainer {
      * @return this
      */
     public FPNTContainer put(@NotNull final byte type, @NotNull final String key, @NotNull final Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value must be not null");
+        }
         maps.computeIfAbsent(type, k -> new ConcurrentHashMap<>());
         final Map<String, Object> tmpMap = maps.get(type);
         final Object tmpValue = tmpMap.get(key);
