@@ -13,6 +13,7 @@ public class FPNTContainer {
 
     private final Map<Byte, Map<String, Object>> maps = new ConcurrentHashMap<>();
     private final Set<FPNTExpander> expanderSet = new ConcurrentHashSet<>();
+    private final Set<FPNTHandler> handlerSet = new ConcurrentHashSet<>();
     private int version = 0;
 
     /**
@@ -84,6 +85,37 @@ public class FPNTContainer {
     }
 
     /**
+     * Get HandlerList
+     * @return
+     */
+    public Set<FPNTHandler> getHandlerSet() {
+        return new HashSet<>(handlerSet);
+    }
+
+    /**
+     * Add custom Handler
+     * @param handler
+     */
+    public void addHandler(@NotNull final FPNTHandler handler) {
+        this.handlerSet.add(handler);
+    }
+
+    /**
+     * Remove custom Handler
+     * @param handler
+     */
+    public void removeHandler(@NotNull final FPNTHandler handler) {
+        this.handlerSet.remove(handler);
+    }
+
+    /**
+     * Remove all Handler
+     */
+    public void clearHandlerList() {
+        handlerSet.clear();
+    }
+
+    /**
      * Put value in type map by key
      * @param type byte key for map
      * @param key
@@ -92,7 +124,12 @@ public class FPNTContainer {
      */
     public FPNTContainer put(@NotNull final byte type, @NotNull final String key, @NotNull final Object value) {
         maps.computeIfAbsent(type, k -> new ConcurrentHashMap<>());
-        maps.get(type).put(key, value);
+        final Map<String, Object> tmpMap = maps.get(type);
+        final Object tmpValue = tmpMap.get(key);
+        tmpMap.put(key, value);
+        for (FPNTHandler handler : handlerSet) {
+            handler.handle(this, type, key, tmpValue, value);
+        }
         return this;
     }
 
@@ -129,8 +166,19 @@ public class FPNTContainer {
      * @return value
      */
     public Object remove(@NotNull final byte type, @NotNull final String key) {
-        final Map<String, Object> map = maps.get(type);
-        return map == null ? null : map.remove(key);
+        final Map<String, Object> tmpMap = maps.get(type);
+        final Object tmpValue;
+        if (tmpMap == null) {
+            tmpValue = null;
+        } else {
+            tmpValue = tmpMap.remove(key);
+            if (tmpMap.isEmpty())
+                maps.remove(type);
+        }
+        for (FPNTHandler handler : handlerSet) {
+            handler.handle(this, type, key, tmpValue, null);
+        }
+        return tmpValue;
     }
 
     /**
