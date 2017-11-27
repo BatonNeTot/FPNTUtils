@@ -127,11 +127,8 @@ public class FPNTContainer {
             throw new IllegalArgumentException("Value must be not null");
         }
         maps.computeIfAbsent(type, k -> new ConcurrentHashMap<>());
-        final Map<String, Object> tmpMap = maps.get(type);
-        final Object tmpValue = tmpMap.get(key);
-        tmpMap.put(key, value);
         for (FPNTHandler handler : handlerSet) {
-            handler.handle(this, type, key, tmpValue, value);
+            handler.handle(this, type, key, maps.get(type).put(key, value), value);
         }
         return this;
     }
